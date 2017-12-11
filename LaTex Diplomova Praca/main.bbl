@@ -1,0 +1,28 @@
+\begin{thebibliography}{1}
+
+\bibitem{hallandB12_naiveAboxAbductionInAlcUsingADlTableau_2012}
+K.~Halland and K.~Britz.
+\newblock Naive abox abduction in alc using a dl tableau.
+\newblock In Y.~Kazakov, D.~Lembo, and F.~Wolter, editors, {\em Description
+  Logics}, volume 846 of {\em CEUR Workshop Proceedings}. CEUR-WS.org, 2012.
+
+\bibitem{Pukancova2017}
+J.~Pukancová and M.~Homola.
+\newblock Tableau-based abox abduction for description logics, 2017.
+
+\bibitem{Reiter1987}
+R.~Reiter.
+\newblock A theory of diagnosis from first principles.
+\newblock {\em Artificial Intelligence}, 32:57--95, 1987.
+
+\bibitem{handbook}
+S.~Staab and R.~E. Studer.
+\newblock {\em Handbook on Ontologies}.
+\newblock Springer, 2010.
+
+\bibitem{handbook2}
+H.~Van, V.~L. Frank, and P.~e. Bruce.
+\newblock {\em Kandbook of knowledge representation}.
+\newblock Elsevier, 2008.
+
+\end{thebibliography}

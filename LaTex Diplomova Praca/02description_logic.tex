@@ -1,0 +1,233 @@
+\chapter{Description logic}\label{chap:Desc}
+
+\section{Introduction to description logic}
+
+This chapter is based on Handbook on ontologies \cite{handbook} and Handbook of knowledge representation \cite{handbook2}.
+\\ \\
+The word ``ontology'' is used with different meanings in different communities.  \\
+In philosophy, Aristotle in his Metaphysics defined \textbf{Ontology} as the study of attributes that belong to things because of their very nature.\\ Ontology focuses on the
+nature and structure of things independently of any further considerations,
+and even independently of their actual existence.\\ For example, it makes
+perfect sense to study the Ontology of unicorns and other fictitious entities:
+although they do not have actual existence, their nature and structure can be
+described in terms of general categories and relations.
+\\ \\
+in Computer Science, we refer to an \textbf{ontology} as a special kind of information object or
+computational artifact. Computational ontologies are a means to formally model the structure
+of a system, that is the relevant entities and relations that emerge from its
+observation, and which are useful to our purposes. An example of such a
+system can be a company with all its employees and their interrelationships.
+The ontology engineer analyzes relevant entities and organizes them into concepts
+and relations, being represented, respectively, by unary and binary predicates.
+\\ \\
+\textbf{Description logics} (\textbf{DLs}) are a family of knowledge representation
+languages that can be used to represent an ontology
+in a structured and formally well-understood way. The ''description'' part of their name is based on how the important notions of the domain
+are described by concept descriptions (unary predicates) and atomic roles (binary predicates). The ''logic'' part comes from their formal, logic-based semantics,
+unlike some other methods of representation of ontologies, for example semantic networks. 
+\\ \textbf{Knowledge base} (a set of facts) in description logics typically comes in two parts: a terminological part (\textbf{TBox}) and an assertional part(\textbf{ABox}).\\
+\textbf{TBox} consists of general statements about concepts. Some examples,: 
+\begin{myex}
+\label{complexConcept}
+ \cite{handbook2} 
+$HappyMan  \equiv   Human  \sqcap  \neg  Female  \sqcap  (\exists  married.Doctor) \sqcap
+(\forall  hasChild.(Doctor  \sqcup  Professor)).$
+\end{myex}
+This example defines a concept, 'HappyMan',  as a human who is not female, is married to a doctor and his every child is a doctor or a professor.
+\begin{myex} \cite{handbook2}
+$\exists hasChild.Human \sqsubseteq Human$
+\end{myex}
+Or, in natural language, if someone has a child that is human, then they are human. \\
+\textbf{ABox} consists of specific statements about individuals. 
+\begin{myex} 
+\label{ABox}
+\cite{handbook2}
+bob : HappyMan \\
+bob,mary : hasChild\\
+mary : $\neg$Doctor
+\end{myex}
+This is an \textbf{ABox} of 3 statements: Bob is a happy man, Bob has a child - Mary, and Mary is not a doctor.
+You may notice that if we had a knowledge base consisting of TBox \ref{complexConcept} and ABox \ref{ABox}, we may deduce  that Mary must be a professor.
+
+\textbf{Interpretation} is done using sets. We will formally define interpretations with specific description logics, but to informally make sense of previous examples: \\
+\textbf{Concepts} can be interpreted as sets of constants,\\ \textbf{individuals} can be interpreted as constants,\\ \textbf{relations} as a set of pairs of constants,\\ \textbf{$\sqcap$} as set conjunction $\cap$, \\ \textbf{$\sqcup$} as set disjunction $\cup$,\\ $\neg$ as set complement,\\ $\sqsubseteq$ as subset symbol $\subseteq$,\\ \textbf{existential restriction} $\exists \textbf{r.C}$ as a set of constants that are in relation \textbf{r} with at least one individual in concept \textbf{C},\\ and \textbf{universal restriction} $\forall$ \textbf{r.C} as a set of constants that are not in relation \textbf{r} with any constant in complement of \textbf{C}. \\Also, A $\equiv$ B means ''A $\sqsubseteq$ B and B $\sqsubseteq$ A''.  
+
+\section{Types of description logics}
+\subsection{$\mathcal{ALC}$}
+In this thesis, we will be using a widely used description logic $\mathcal{ALC}$ and it's extensions.
+$\mathcal{ALC}$ stands for  ''Attributive concept Language with Complements''.
+\begin{mydef} 
+\label{ALCsyntax}
+\cite{handbook2}
+($\mathcal{ALC}$ syntax). Let $N_C$ be a set of concept names and $N_R$ be a set of
+role names. The set of Concepts is the smallest set such that
+\begin{enumerate}
+\item $ \top, \bot,$ and every concept name $A \in N_C$ is an Concept,
+\item  If C and D are Concepts and $r \in N_R$, then $C \sqcap D,\\ C \sqcup D , \neg C, \forall r.C,$ and $\exists r.C$ are Concepts.
+\end{enumerate}
+\end{mydef}
+The semantics of $\mathcal{ALC}$ (and of DLs in general) are given in terms of interpretations. 
+\begin{mydef}
+\label{ALCsemantics}
+\cite{handbook2} 
+($\mathcal{ALC}$ semantics). An interpretation $\mathcal{I}$ = ($\Delta ^\mathcal{I}$, $\cdot ^\mathcal{I}$) consists of a nonempty
+set $\Delta ^\mathcal{I}$, called the domain of $\mathcal{I}$, and a function $\cdot ^\mathcal{I}$ that maps every $\mathcal{ALC}$ Concept
+to a subset of $\Delta ^\mathcal{I}$, and every $\mathcal{ALC}$ role to a subset of $\Delta ^\mathcal{I} \times \Delta ^\mathcal{I}$ such that, for all $\mathcal{ALC}$ Concepts C, D and all role names r:\\
+\begin{tabular}{l l}
+ $\top ^\mathcal{I} = \Delta^\mathcal{I}$ & $\bot ^\mathcal{I} = \emptyset $, \\
+$(C \sqcap D)^\mathcal{I}$ & $= C^\mathcal{I} \cap D^\mathcal{I}$,\\
+ $(C \sqcup D) ^\mathcal{I}$ & $= C^\mathcal{I} \cup D^\mathcal{I}$\\
+ $\neg C^\mathcal{I}$ & $= \Delta^\mathcal{I} \backslash C^\mathcal{I}$, \\
+ $ (\exists r.C)^\mathcal{I}$ & $= \{x \in \Delta ^\mathcal{I} | \exists y \in \Delta ^\mathcal{I} $ with  $\langle x, y \rangle \in r^\mathcal{I}$ and $y \in C^\mathcal{I}\}$,\\
+ $(\forall r.C)^\mathcal{I}$ & $= \{x \in \Delta ^\mathcal{I} | \forall y \in \Delta ^\mathcal{I},$ if $\langle x, y \rangle \in  r^\mathcal{I},$ then  $y \in C^\mathcal{I}\}$.\\
+\end{tabular}
+\end{mydef}
+
+The examples of TBox and ABox in the previous section are in $\mathcal{ALC}$.
+\subsection{$\mathcal{SHIQ}$} 
+\label{SHIQ}
+$\mathcal{SHIQ}$ is one of the most expressive description logics.
+\textbf{S} - abbreviation of \textbf{$\mathcal{ALC}$} with transitive roles. \\
+\textbf{H} - Role hierarchy  (role $r_1$ can be subrole of role $r_2$)\\
+\textbf{I} - Inverse properties   (if a,b : r, then b,a : $r^-$) \\
+\textbf{Q} - Quantified cardinality restrictions  (for example $\leq 2  hasChild$)\\
+
+Examples of Concepts in \textbf{$\mathcal{SHIQ}$}:
+\begin{myex} \cite{handbook}
+$ Human  \sqcap \neg Female \sqcap \exists married.Doctor \\
+ \sqcap (\geq 5  hasChild) \sqcap \forall hasChild.Professor $ .
+\end{myex}
+''A man that is married to a doctor and has at least five
+children, all of whom are professors''.
+\begin{myex} \cite{handbook}
+$Human \sqsubseteq \forall hasParent.Human \sqcap (\geq 2 hasParent.\top) \\
+ \sqcap (\leq 2 hasParent.\top) 
+\sqcap \forall hasParent^-.Human$
+\end{myex}
+''If someone is a human, all their parents are human. they have exactly two parents, and everything that has them as a parent (i.e. is their child) is a human.''
+\begin{myex}
+\label{rolehierarchy}
+ \cite{handbook}\\
+$hasParent \sqsubseteq hasAnccestor$.
+\end{myex}
+''hasParent is a subrole of hasAncestor (i. e. If A hasparent.B , then A hasAncestor.B).''
+\begin{myex}
+Trans(hasAncestor) 
+\end{myex}
+''The role hasAncestor is transitive (i.e. if A hasAncestor.B and B hasAncestor.C then A hasAncestor.C).'' \\
+\\
+The definitions of syntax and semantics of $\mathcal{SHIQ}$ are similar to those of $\mathcal{ALC}$.
+\begin{mydef} 
+\cite{handbook} ($\mathcal{SHIQ}$ syntax) Let R be a set of role names, which is partitioned into a set $R_+$ of transitive roles and a set $R_p$ of normal roles. 
+The set of all $\mathcal{SHIQ}$ roles is R $\cup \{r^- | r \in R\}$, where $r^-$ is called the inverse of the role r. \\
+Let C be a set of concept names. The set of $\mathcal{SHIQ}$ concepts is the smallest set such that:  
+\begin{enumerate}
+\item every concept $A \in C$ is a $\mathcal{SHIQ}$ concept.
+\item if A and B are $\mathcal{SHIQ}$ concepts and r is a $\mathcal{SHIQ}$ role, then $A\sqcap B, A\sqcup B,  \neg A, \forall r.A,  and \exists r.A$ are $\mathcal{SHIQ}$ concepts.
+\item if A is a $\mathcal{SHIQ}$ concept and r is a simple $\mathcal{SHIQ}$ role (simple role is neither transitive nor has a transitive subrole), and $n \in \mathbb{N}$, then $(\leq n r.A)$  and 
+$(\geq n r.A)$ are $\mathcal{SHIQ}$ concepts.
+\end{enumerate}
+TODO: nemala by tam byt spomenuta aj hiearachia roli? (v handbook to v definicii syntaxu a semantiky konceptov a roli nespominaju) \\
+\end{mydef}
+ \begin{mydef}($\mathcal{SHIQ}$ semantics) \cite{handbook}
+in addition to definition \ref{ALC semantics}, for all  $p \in R$ and $r \in R_+$: \\
+%\begin{itemize} 
+ $\langle x,y \rangle \in p^\mathcal{I}$ iff  $\langle y,x \rangle \in (p^- )^\mathcal{I}$. \\
+ if $\langle x,y \rangle \in r^\mathcal{I}$ and $ \langle y,z \rangle \in r^\mathcal{I}$ then $\langle x,z \rangle \in r^\mathcal{I}$.\\
+ $(\leq n r.C)^\mathcal{I} = \{x \in \Delta ^\mathcal{I} | \# r^\mathcal{I} (x,C) \leq n\}$,\\
+$(\geq n r.C)^\mathcal{I} = \{x \in \Delta ^\mathcal{I} | \# r^\mathcal{I} (x,C) \geq n\}$,\\
+
+%\end{itemize}
+where \#M  denotes the cardinality of the set M, and $r^\mathcal{I} (x,C) \mathrel{\mathop:}= \{y | \langle x,y \rangle \in r^\mathcal{I}$ and $y \in C^\mathcal{I}\}$.
+\end{mydef}
+
+
+OWL is based on $\mathcal{SHOIN}$, which is very similar to $\mathcal{SHIQ}$
+
+\subsection{$\mathcal{ALCHO}$}
+$\mathcal{ALC}$ with role hierarchy and Nominals.\\
+\textbf{Nominals} are concepts with exacly one specific instance. For example, \{john\} is a concept with its only instance being the individual 'john'. \\
+Nominals can be used to express enumerations, for example \cite{primer}: \\
+   $Beatle \equiv \{john\} \sqcup  \{paul\} \sqcup  \{george\} \sqcup  \{ringo\} $\\
+\\
+\textbf{Role hirerarchy} was already described in section \ref{SHIQ} (example \ref{rolehierarchy}).
+\begin{mydef} (Syntax and semantics of $\mathcal{ALCHO}$)\\
+	Syntax of $\mathcal{ALCHO}$ is the syntax of $\mathcal{ALC}$ (definition \ref{ALCsyntax}), with \{a\} added to the set of concepts C for each individual 'a'.\\
+	Similarly, semantics of $\mathcal{ALCHO}$ are the semantics of $\mathcal{ALC}$ (definition \ref{ALCsemantics}) with the addition of 
+     $\{a\}^\mathcal{I}$ = $ \{ a^\mathcal{I} \} $ ,\\ 
+     where 'a' is an individual and $ \mathcal{I}$ is the interpretation. \\
+
+(TODO: nemali by sme spomenut aj hierarchiu roli? V handbooku 1 \cite{handbook} som ich nenasiel v syntaxi a semantike SHIQ)
+\end{mydef}
+\subsection{$\mathcal{SROIQV(D)}$}
+Jazyk koncludu, TODO asi ked bude hotova implementacia.
+\section{tableau algorithm}
+
+In our algorithm, we heavily make use of tableau algorithm. To explain what tableau algorithm is, first we have to define a few terms.
+
+\begin{mydef} \cite{handbook2} (model $\mathcal{ALC}$)\\
+A knowledge base $\mathcal{KB}$ = ( $ \mathcal{T} $ , $ \mathcal{A} $), where $\mathcal{T}$ is TBox and $\mathcal{A}$ is ABox.\\
+A general concept inclusion (GCI) is of the form $C \sqsubseteq D$, where C, D
+are $\mathcal{ALC}$ Concepts. $\mathcal{T}$ is a set of CGIs. An interpretation $\mathcal{I}$ is a model
+of a GCI $C \sqsubseteq D$ if $C^\mathcal{I} \subseteq D^\mathcal{I}$.\\ $\mathcal{I}$ is a model of a TBox T if it is a model of every GCI
+in T. \\
+An assertional axiom is of the form x : C or (x, y) : r, where C is
+an $\mathcal{ALC}$ Concept, r is a role name, and x and y are individual names. $\mathcal{A}$ is a set of assertional axioms. \\
+An interpretation $\mathcal{I}$ is a model of an assertional 
+axiom x : C if $x^\mathcal{I} \in C^\mathcal{I}$, and $\mathcal{I}$ is a model of an assertional axiom (x, y) : r if
+$x^\mathcal{I}$,$y^\mathcal{I} \in r^\mathcal{I}$.\\ $\mathcal{I}$ is a model of an ABox $\mathcal{A}$ if it is a model of every axiom in $\mathcal{A}$. \\
+$\mathcal{I}$ is a model of $\mathcal{KB}$ if it's a model of $\mathcal{A}$ and $\mathcal{T}$. \\
+If a model of $\mathcal{KB}$ exists, we say that $\mathcal{KB}$ is consistent.
+\end{mydef}
+\begin{myex} (model) \\
+
+\noindent Knowledge base $\mathcal{KB} = \{ \mathcal{T} , \mathcal{A} \}$, 
+$ \mathcal{T} $= \{ \\
+\indent $A \sqsubseteq B$ \\
+\indent $A \sqsubseteq	\exists r.C$ \\
+\indent $C \sqsubseteq \forall r.D$\\
+\}\\
+$ \mathcal{A} $ = \{  \\
+\indent a : A \\
+\indent c,d : r \\
+\} 
+\\
+One possible model of $\mathcal{KB}$, $\mathcal{M}_1$, would be: \{ \\
+\indent $\Delta ^\mathcal{I}$ = \{ $a_x, c_x, d_x$ \} \\
+\indent $a^\mathcal{I} = a_x, c^\mathcal{I} = c_x, d^\mathcal{I} = d_x$\\
+\indent $A^\mathcal{I} = \{a_x\}, B^\mathcal{I} = \{a_x\}, C^\mathcal{I} = \{c_x\}, D^\mathcal{I} = \{d_x\} $\\
+\indent $r^\mathcal{I} = \{ \langle a_x,b_x\rangle , \langle a_x,c_X \rangle, \langle c_x,d_x \rangle \} $ \\
+  		\} \\
+But other models also exist, for example $\mathcal{M}_2$ and $\mathcal{M}_3$.
+$\mathcal{M}_2$ = \{  \\
+\indent$ \Delta ^\mathcal{I}$ = \{ $a_x, c_x, d_x, c_n$ \} \\ 
+\indent$a^\mathcal{I} $ = $a_x, c^\mathcal{I} = c_x, d^\mathcal{I} = d_x$ \\
+\indent$A^\mathcal{I}$ = $\{a_x\}, B^\mathcal{I} = \{a_x\}, C^\mathcal{I} = \{c_n\}, D^\mathcal{I} = \{ \} $ \\
+\indent$r^\mathcal{I}$ = $\{ \langle a_x,b_x\rangle , \langle a_x,c_n \rangle, \langle c_x,d_x \rangle \} $
+\} \\
+$\mathcal{M}_3$ = \{ \\
+\indent $\Delta ^\mathcal{I} = \{ i_x\}     $\\
+ \indent $a^\mathcal{I} = i_x, c^\mathcal{I} = i_x, d^\mathcal{I} = i_x $\\
+\indent $A^\mathcal{I} = B^\mathcal{I} = C^\mathcal{I} = D^\mathcal{I} = \{i_x\}$\\
+\indent $r^\mathcal{I} = \{ \langle i_x, i_x \rangle \}$\\
+\}
+\end{myex}
+Tableau algorithm is a method of constructing a model of a knowledge base $\mathcal{KB}$ if $\mathcal{KB}$ is consistent, and stops if $\mathcal{KB}$ is inconsistent and thererfore no model exists.\\
+Tableau algorithm uses knowledge base in negation normal form (NNF), that is, every concept complement $\neg$ applies only to a concept name \cite{handbook2}.  Any $\mathcal{ALC}$ concept can be transformed to an equivalent concept in NNF by using de Morgan's laws and the duality between existential and universal restrictions ($\neg \exists r.C \equiv \forall r.{\neg C}$).
+For example, the concept $\neg (\exists r.A \sqcap \forall s.B)$,
+where A, B are concept names, can be transformed using de Morgan's laws to $\neg \exists r.C \sqcup \neg \forall s.B$, and this can then be transformed using the existential-universal duality into $(\forall r.\neg A) \sqcup (\exists s.\neg B)$.
+\\ \\ 
+The idea behind the tableau algorithm for $\mathcal{KB} = \{ \mathcal{T} , \mathcal{A} \} $is to start with the concrete situation described in $\mathcal{A}$ and expand based on what can be inferred from $\mathcal{T}$ and currently known ABox statements. This is done by starting with a tree where nodes are individuals, directed edges are relations between individuals, and each individual has a label consisting of concepts the individual belongs to and rules that apply to the individual. The algorithm must at some times, specifically when $\sqcup$  rule is used, make an undeterministic decision.
+\\
+Clash is when, for an a concept C, both C and $\neg C$ are in an individuals label. if this happens, we backtrack to a previous undeterministic decision with an unexplored choice and continue from there.    
+If there is no decision with an unexplored possibility we can backtrack to, we can declare $\mathcal{KB}$ to be inconsistent. On the other hand, if all relevant rules have been used for each individual, then $\mathcal{KB}$ is consistent as we have just found it's model.
+
+
+\\ \\TODO: priklad s obrazkom, formalna definicia, casova zlozitost, rozsirenie tableau pre ostatne spomenute deskripcne logiky.
+
+
+
+\section{OWL (mozno)}
+	TODO: definovat SHOIN
+\section{Použitia  (možno, spomenúť rôzne databázy)}
+

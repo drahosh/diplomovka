@@ -1,0 +1,100 @@
+\chapter{Implementation}\label{chap:implementation}
+
+% mat. symboly -- mal by si aj ty take pouzivat namiesto \textbf{...}
+\newcommand{\K}{\mathcal{K}}
+\newcommand{\T}{\mathcal{T}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\R}{\mathcal{R}}
+\newcommand{\I}{\mathcal{I}}
+\renewcommand{\S}{\mathcal{S}}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\inputKB}{\mathit{inputKB}}
+\newcommand{\Expl}{\mathit{Expl}}
+\newcommand{\Ex}{\mathit{Ex}}
+\newcommand{\Ont}{\mathit{Ont}}
+\newcommand{\MS}{\mathit{MS}}
+
+\newcommand{\KO}{\K \cup \{\neg O\}}
+\newcommand{\KOE}[1]{\K \cup #1 \cup \{\neg O\}}
+\newcommand{\Sexmin}{\S^{\mathrm{min}}_\E}
+
+% \begin{algorithm}
+  % \caption{ggggadeqgeq}
+%    \begin{algorithmic}[1]
+%\begin{algorithm}[t!]
+%\begin{algorithmic}[1]
+
+      %\Function{Merge}{$A,p,q,r$}\Comment{Where A - array, p - left, q - middle, r - right} 
+%\textbf{Input:} Knowledge base \textbf{K}, observation \textbf{O}, maxDepth \textbf{maxD} %\\
+%	\textbf{Output:}
+ %Set of minimum explanations \textbf{S} %\\
+%		\If {\textbf{KB} $\cup$ \textbf{O}S is inconsistent}
+%	\State Return \{\}   //observation not consistent with knowledge base 
+%\EndIf
+ %		\If {$ \textbf{KB} \cup \neg \textbf{O}$ is inconsistent}
+%		\State 	return \{\{\}\}    //observation implied by knowledge base
+%\EndIf
+
+
+
+ %       \State ${C} = \{\{\}\}$
+ %     \State ${nextC} = \emptyset $
+%	\State ${\textbf{S}}=\emptyset $
+ %       \State $\textbf{d}=0$
+  %      \While {$C\neq \emptyset \land  \textbf{d} \leq \textbf{maxD}$}{
+%		   \For{ each candidate $c \in C$}
+%				\State  $abcd + efgh = qegp$
+%			\EndFor
+
+   %     \State $L[{n_1} + 1] =  \infty $
+      %  \State $R[{n_2} + 1] =  \infty $
+ %       \State $i = 1$
+  %      \State $j = 1$
+        
+   %\EndFunction
+%   \end{algorithmic}
+%\end{algorithm}
+   
+   \begin{algorithm}[t!]
+    %\caption{AAA($\K$,$O$): ABox Abductive Algorithm}
+    %\label{alg:AAA}
+    \begin{algorithmic}[1]
+    \Function{Merge}{ Knowledge base \textbf{K}, observation \textbf{O}, maximum Depth \textbf{maxD}}
+    	%\Require knowledge base $\K$, set of observations $O$
+		%\Ensure set of all minimal explanations $\Sexmin$
+    	\State \textbf{Output:} Set of minimum explanations \textbf{S}
+    	\If {\textbf{KB} $\cup$ \textbf{O} is inconsistent}
+			\State \Return $\{\{\}\}$   //observation not consistent with knowledge base 
+		\EndIf
+		
+%		\State $\Sigma \gets$ $\{\}$ \Comment collection of the sets of explanations for all observations
+%		
+%		\ForAll{$O_i \in O$}
+%		\State $\S_{\E_i} \gets$ SOA($\K$, $O_i$) \Comment{set of explanations for the subproblem $O_i$}
+%		\label{aaa:soa}
+%		\If {$\S_{\E_i} = \{\}$}
+%		\label{aaa:noexpl:b}
+%			\State \Return $\{\}$ \Comment{if $O_i$ has no explanation then neither $O$ has}
+%			\label{aaa:noexpl:e}
+%		\ElsIf {$\S_{\E_i} \neq$  \texttt{"nothing to explain"}}
+%	 	\Comment{$\K \models O_i$ -- exclude $O_i$}
+%	 	\label{aaa:nte}
+%			\State $\Sigma \gets \Sigma \cup \{\S_{\E_i}\}$
+%			\label{aaa:sigma}
+%		\EndIf
+%		\EndFor		
+%		
+%		\If {$\Sigma = \{\}$}
+%		\label{aaa:sigma_empty}
+%			\State \Return \texttt{"nothing to explain"}
+%			\label{aaa:sigma_empty_term}
+%		\Else
+%			\State $\S_{\E} \gets \{\E_1 \cup \ldots \cup \E_m \mid \E_i \in \S_{\E_i}, \S_{\E_i} \in \Sigma, m = |\Sigma|\}$ \Comment{all combinations of the expl.}
+%			\label{aaa:se}
+%			\State $\Sexmin \gets \{\E \mid \E \in \S_\E $ and $\forall \E' \in \S_\E \colon \E' \not\subseteq \E $ and $\E$ is consistent and relevant$\}$
+%			\label{aaa:semin}
+%		\EndIf
+%		\State \Return $\Sexmin$
+		\EndFunction
+    \end{algorithmic}
+\end{algorithm}

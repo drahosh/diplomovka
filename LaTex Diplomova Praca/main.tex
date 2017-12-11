@@ -1,0 +1,206 @@
+\documentclass[12pt, a4paper, oneside]{book}
+\usepackage[hidelinks]{hyperref}
+
+
+\usepackage[english,slovak]{babel}	
+%\usepackage{epsfig}
+%\usepackage{epstopdf}
+\usepackage{amsfonts}
+
+%\usepackage[chapter]{algorithm}
+
+\usepackage{algorithm}
+%\usepackage{algorithmic}
+\usepackage{algpseudocode}
+
+\usepackage{listings}
+%\usepackage{amsmath}
+%\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{color}
+\usepackage{url}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{setspace}
+%\usepackage{tabularx}
+\usepackage{textcomp}
+\usepackage{caption}
+\usepackage{natbib}
+
+%\usepackage{amsmath}
+
+\hyphenpenalty=10000 
+\bibliographystyle{abbrv}
+
+\setstretch{1.5}
+%\renewcommand\baselinestretch{1.5} % riadkovanie jeden a pol
+
+% pekne pokope definujeme potrebne udaje
+\newcommand\mftitle{Abduction solver based on  highly   efficient C++ DL reasoner}
+\newcommand\mfthesistype{Master thesis}
+\newcommand\mfauthor{Bc. Drahomír Mrózek}
+\newcommand\mfadvisor{RNDr. Martin Homola, PhD.}
+\newcommand\mfconsultant{Mgr. Júlia Pukancová}
+\newcommand\mfplacedate{Bratislava, 2017}
+\newcommand\mfuniversity{Comenius university in bratislava}
+\newcommand\mffaculty{Faculty of Mathematics, Physics and Informatics}
+\newcommand{\sub}[1]{$_{\text{#1}}$}
+\newcommand{\reference}[1]{č.~\ref{#1}}
+\newcommand{\imageHeight}{150px}
+
+\ifx\pdfoutput\undefined\relax\else\pdfinfo{ /Title (\mftitle) /Author (\mfauthor) /Creator (PDFLaTeX) } \fi
+\newtheorem{mytheo}{theorem}[section]
+
+%\theoremstyle{definition}
+
+
+\newtheorem{mydef}{Definition}[section]
+\newtheorem{myex}{Example}[section]
+\begin{document}
+
+\frontmatter
+
+\thispagestyle{empty}
+
+\noindent
+\begin{minipage}{\textwidth}
+\begin{center}
+\textbf{\mfuniversity \\
+\mffaculty}
+\end{center}
+\end{minipage}
+
+\vfill
+\begin{figure}[!hbt]
+	\begin{center}
+
+		\label{img:logo}
+	\end{center}
+\end{figure}
+\begin{center}
+
+		{\textbf{\Large\MakeUppercase{\mftitle}}}\\
+		\smallskip
+		{\mfthesistype}
+	
+\end{center}
+\vfill
+2018 \hfill
+\mfauthor
+\eject 
+% koniec obalu
+
+\thispagestyle{empty}
+
+\noindent
+\begin{minipage}{\textwidth}
+\begin{center}
+\textbf{\mfuniversity \\
+\mffaculty}
+\end{center}
+\end{minipage}
+
+\vfill
+\begin{figure}[!hbt]
+\begin{center}
+\includegraphics{images/logo_fmph_dark}
+\label{img:logo_dark}
+\end{center}
+\end{figure}
+\begin{center}
+{\textbf{\Large\MakeUppercase{\mftitle}}}\\
+		\smallskip
+		{\mfthesistype}
+\end{center}
+\vfill
+\begin{tabular}{l l}
+%Registration number: & 40a99bd8-3cb6-4534-9330-c7fd9b5e5ca4 \\
+Study programme: & Applied informatics\\
+Field of study: & 2511 Aplikovaná informatika\\
+Study department: & Department of Applied Informatics\\
+Advisor: &  \mfadvisor \\
+Consultant: & \mfconsultant
+\end{tabular}
+\vfill
+\noindent
+\mfplacedate \hfill
+\mfauthor
+\eject 
+% koniec titulneho listu
+
+%\thispagestyle{empty}
+%\includegraphics[width=\textwidth]{images/zadanie}
+%\vfill
+%\eject
+% koniec zadania
+
+\thispagestyle{empty}
+
+
+\begin{figure}[H]
+\begin{center}
+todo:zadanie
+\label{img:zadanie}
+\end{center}
+\end{figure}
+
+{~}\vspace{12cm}
+
+\noindent
+\begin{minipage}{0.25\textwidth}~\end{minipage}
+\begin{minipage}{0.75\textwidth}
+Čestne prehlasujem, že túto diplomovú prácu som vypracoval samostatne len s použitím uvedenej literatúry a za pomoci konzultácií u môjho školiteľa.
+\newline \newline
+\end{minipage}
+\vfill
+~ \hfill {\hbox to 6cm{\dotfill}} \\
+\mfplacedate \hfill \mfauthor
+\vfill\eject 
+% koniec prehlasenia
+
+\chapter*{Acknowledgments}\label{chap:thank_you}
+TODO
+\vfill\eject 
+% koniec podakovania
+\chapter*{Abstract}\label{chap:abstract_en}
+This work will start from an existing solution of an abduction solver based on Pellet reasoner for description logics, implemented in Java. The implementation in C++ opens different ways for improvement and effectivization, starting with the utilization of a more effective C++ inference system for description logics.
+~\\
+Keywords: abduction, description logic
+\vfill\eject 
+\chapter*{Abstrakt}\label{chap:abstract_sk}
+Práca bude vychádzať z existujúceho riešenia abduktívneho systému založeného na reasoneri pre deskripčné logiky Pellet implementovaného v Jave. Pri implementácii v C++ sa otvárajú možnosti na zlepšenie a zefektívnenie existujúceho návrhu abduktívneho solvera, počnúc využitím efektívnejšieho C++ inferenčného systému pre deskripčné logiky.
+
+~\\
+Kľúčové slová: abdukcia, deskripčná logika
+\vfill\eject 
+
+
+
+
+% koniec abstraktov
+\renewcommand{\contentsname}{Contents}
+\tableofcontents
+
+\mainmatter
+
+\renewcommand{\chaptername}{Chapter}
+
+% treba este prejst dokument ci je kod spravne formatovany
+\input 01intro.tex
+\input 02description_logic
+\input 03abduction
+\input 04previous_solutions
+\input 05our_solution
+\input 06implementation
+\input 07results
+\input 08conclusion
+\backmatter
+
+\nocite{*}
+%\bibliographystyle{abbrv}
+\bibliography{references}
+
+\listoffigures
+
+\end{document}
