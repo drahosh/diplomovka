@@ -220,10 +220,8 @@ where A, B are concept names, can be transformed using de Morgan's laws to $\neg
 The idea behind the tableau algorithm for $\mathcal{KB} = \{ \mathcal{T} , \mathcal{A} \} $is to start with the concrete situation described in $\mathcal{A}$ and expand based on what can be inferred from $\mathcal{T}$ and currently known ABox statements. This is done by starting with a tree where nodes are individuals, directed edges are relations between individuals, and each individual has a label consisting of concepts the individual belongs to and rules that apply to the individual. The algorithm must at some times, specifically when $\sqcup$  rule is used, make an undeterministic decision.
 \\
 Clash is when, for an a concept C, both C and $\neg C$ are in an individuals label. if this happens, we backtrack to a previous undeterministic decision with an unexplored choice and continue from there.    
-If there is no decision with an unexplored possibility we can backtrack to, we can declare $\mathcal{KB}$ to be inconsistent. On the other hand, if all relevant rules have been used for each individual, then $\mathcal{KB}$ is consistent as we have just found it's model.
-
-
-\\ \\TODO: priklad s obrazkom, formalna definicia, casova zlozitost, rozsirenie tableau pre ostatne spomenute deskripcne logiky.
+If there is no decision with an unexplored possibility we can backtrack to, we can declare $\mathcal{KB}$ to be inconsistent. On the other hand, if all relevant rules have been used for each individual, then $\mathcal{KB}$ is consistent as we have just found it's model. \\
+ TODO: priklad s obrazkom, formalna definicia, casova zlozitost, rozsirenie tableau pre ostatne spomenute deskripcne logiky.
 
 
 
