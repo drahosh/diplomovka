@@ -201,12 +201,15 @@ where \#M  denotes the cardinality of the set M, and $r^\mathcal{I} (x,C) \mathr
 \end{mydef}
 
 $\SHIQ$ ABox and it's model are the same as in $\ALC$ (definition \ref{ALCAbox}). For the TBox, we have to add role subsumption axioms. 
+Some authors define TBox as only containing GCIs, and use a new structure, RBox, to contain role inclusions. For this thesis, role inclusion axioms are a part of TBox.
 
 \begin{mydef} \label{SHIQTBox} \cite{handbook} ($\SHIQ$ TBox) \\
 A role inclusion axiom is of the form $r \sqsubseteq s$, where r,s
 are roles. An interpretation $\I$ is a model of a role inclusion axiom  $r \sqsubseteq s$ if $r^{\I} \subseteq s^{\I}$.\\
-$\I$ is a model of a TBox $\T$ if it it is a model of every role inclusion and GCI axioms (definition \ref{ALCTBox}) in TBox.
+$\I$ is a model of a TBox $\T$ if it it is a model of every role inclusion axiom and GCI axiom (definition \ref{ALCTBox}) in TBox.
 \end{mydef}
+
+
 
 
 
@@ -231,20 +234,98 @@ Jazyk koncludu, TODO asi ked bude hotova implementacia.
 \section{tableau algorithm}
 
 In our algorithm, we heavily make use of tableau algorithm.
-Tableau algorithm is a method of constructing a model of a knowledge base $\mathcal{K}$ if $\mathcal{K}$ is consistent, and stops if $\mathcal{K}$ is inconsistent and thererfore no model exists. \\ \indent
+Tableau algorithm is a method of constructing a model of a knowledge base $\mathcal{K}$ if $\mathcal{K}$ is consistent, and stops if no model of $\mathcal{K}$ exists and thererfore $\K$ is inconsistent. \\ \indent
 Tableau algorithm uses knowledge base in negation normal form (NNF), that is, every concept complement $\neg$ applies only to a concept name \cite{handbook2}.  Any $\mathcal{ALC}$ concept can be transformed to an equivalent concept in NNF by using de Morgan's laws and the duality between existential and universal restrictions ($\neg \exists r.C \equiv \forall r.{\neg C}$).
 For example, the concept $\neg (\exists r.A \sqcap \forall s.B)$,
 where A, B are concept names, can be transformed using de Morgan's laws to $\neg \exists r.C \sqcup \neg \forall s.B$, and this can then be transformed using the existential-universal duality into $(\forall r.\neg A) \sqcup (\exists s.\neg B)$.
 \\ \\ 
-\indent The idea behind the tableau algorithm for $\mathcal{K} = \{ \mathcal{T} , \mathcal{A} \} $is to start with the concrete situation described in $\mathcal{A}$ and expand based on what can be inferred from $\mathcal{T}$ and currently known ABox statements. This is done by starting with a tree where nodes are individuals, directed edges are relations between individuals, and each individual has a label consisting of concepts the individual belongs to and rules that apply to the individual. The algorithm must at some times, specifically when $\sqcup$  rule is used, make an undeterministic decision.
-\\
-\indent
-Clash happens when, for an a concept $C$, both $C$ and $\neg C$ are in an individuals label. if this happens (in a deterministic implementation), we backtrack to a previous undeterministic decision with an unexplored choice and continue from there.    
-If there is no decision with an unexplored possibility we can backtrack to, we can declare $\mathcal{K}$ to be inconsistent. On the other hand, if all relevant rules have been used for each individual, then $\mathcal{K}$ is consistent as we have just found it's model. \\
- TODO: priklad s obrazkom, formalna definicia, casova zlozitost, rozsirenie tableau pre ostatne spomenute deskripcne logiky.
+\indent The idea behind the tableau algorithm for $\mathcal{K} = \{ \mathcal{T} , \mathcal{A} \} $is to start with the concrete situation described in $\mathcal{A}$ and expand based on what can be inferred from $\mathcal{T}$ and currently known ABox statements. This is done using something called completion graph, which is a graph where nodes represent individuals, directed edges represent relations between individuals, each node has a label containing concepts the individual belongs to, and each edge has a label consisting of the names of it's roles .
+
+\begin{mydef} (Completion graph) \\
+A completion graph is a pair ($\G,\L$), where $\G$ is a directed finite graph and $\L$ is a labeling function mapping each node from $\G$ to a set of concepts, and each edge to a set of roles. 
+\end{mydef}
+
+
+Tableau algorithm for $\K (\T ,\A )$ first creates a completion graph based on $\A$, and then expands it using tableau expansion rules.
+
+\begin{mydef} \cite{handbook2} ($\ALC$ tableau expansion rules)
+\begin{itemize}
+\item $\sqcap$-rule: if 	 $C_1 \sqcap C_2 \in \L (x)$, x is not blocked (definition \ref{blocking}), and 
+$\{C_1, C_2\} \not\subseteq  \L (x)$
+then set $\L (x) = \L (x) \cup \{C_1, C_2\}$
+\item $\sqcup$-rule: if 1. $C_1 \sqcup C_2 \in \L (x)$, x is not blocked, and 
+$\{C_1, C_2\} \cap  \L (x) = \emptyset$,
+then set $\L (x) = \L (x) \cup \{C\}$, for some $C \in \{C_1,C_2\}$
+\item $\exists$-rule: if  $\exists r.C \in \L (x)$, x is not blocked, and
+x has no r-successor y with $C \in \L (y)$,
+then create a new node y with $\L (\langle x, y \rangle) = \{r\}$ and $\L (y) = \{C\}$.
+\item $\forall$-rule: if $\forall r.C \in \L (x)$, x is not blocked, and
+there is an r-successor y of x with $C \not\in \L (y)$
+then set $\L(y) = \L(y) \cup \{C\}$.
+\item $\sqsubseteq$-rule: if  $C_1 \sqsubseteq C_2 \in \T $, x is not blocked, and
+$C_2 \sqcup $NNF($\neg C_1) \not\in \L (x)$,
+then set $\L (x) = \L (x) \cup \{C_2 \sqcup$ NNF($\neg C_1$) \} 
+\end{itemize}
+Where $C, C_1, C_2$ are concepts, $r$ is role, $\T$ is TBox, and NNF is normal negation form.
+\end{mydef}
+
+Why are we checking whether nodes are blocked? And what are blocked nodes? \\
+If we removedl ''x is not blocked'' from all expansion rules, then the algorithm could generate an infinite graph using the $\exists$ rule, for example for 
+$\K =(\T ,\A), \T = \{C \sqsubseteq \exists r.C \}, \A=\{a:C\}$ the algorithm would create a node $a_2$ with $\langle a,a_2 \rangle :r$, then a node $a_3$ with $\langle a_2,a_3\rangle :r$ and so on.
+To guarantee termination, we define node blocking.
+\begin{mydef} \label{ancestor} (ancestor)
+In completion graph $\mathcal{CG} = (G, \L), G=(N,E)$, nodes $x,y \in N$, and edge $\langle x,y \rangle \in E$, then y is a successor of x and x is an ancestor of y. \\
+If $\L (\langle x,y \rangle) = r$, then y is an r-successor of x. \\
+Ancestry is transitive (if node x is an ancestor of node y and y is an an ancestor of node z, then x is is an ancestor of z).
+
+\end{mydef}
+\begin{mydef} \label{blocking}(blocking)
+A node x is blocked if it has an ancestor y that is either blocked, or $\L (x) \subseteq \L (y)$ .
+\end{mydef}
+
+And now we can show the pseudocode of (nondeterministic) tableau algorithm.
+
+\begin{algorithm}[t!]
+    \begin{algorithmic}[1]
+		    \Function{TableauAlg}{ Knowledge base $\K$ =($\T ,\A$)}
+			\State Convert $\T$ to NNF.
+			\State Completion graph $\CG =(\G,\L) , \G=(\Nodes,\Edges), \Nodes = \Edges = \L =\emptyset$
+			\For{Each individual $i \in \A$}
+				\State $\Nodes = \Nodes \cup n_i$
+				\For{Each assertional axiom $(i : C) \in \A$}
+					\State $\L (n_i) = \L (n_i) \cup C$
+				\EndFor
+				
+				\For{Each assertional axiom $(i,x : r) \in \A$}
+					\State $\Edges = \Edges \cup \langle n_i,n_x \rangle$
+					\State $\L (\langle n_i,n_x \rangle) = \L (\langle n_i,n_x \rangle)  \cup r$
+				\EndFor  
+			\EndFor
+			\While{A tableau expansion rule can be applied on $\CG$}
+				\State Apply a rule on $CG$
+				\If{Clash exists in $\CG$}
+					\State \Return ''$\K$ is inconsistent''  (assuming algorithm undeterministically always picks the 'correct' decision in $\sqcup$ rule if one exists)
+				\EndIf
+			\EndWhile
+			\State \Return ''$\K$ is consistent''
+			\EndFunction
+
+    \end{algorithmic}
+\end{algorithm}
+
+	\begin{mydef} (clash)\\
+		In completion graph $\CG$=$( (\Nodes, \Edges),\L)$ , if there is a node $n \in \Nodes$ and a concept C where $\{ C , \neg C \} \in \L (n)$, then $\CG$ has a clash.
+	
+\end{mydef}
+If the algorithm cannot apply any expansion rules, then $\K$ is consistent and $\CG$ is its model, or a finite part of an infinite model due to blocking. Our abduction algorithm only needs this finite part.\\
+ The tableau algorithm has 2 sources of nondeterminism : picking which rule to apply, and how to apply the $\sqcup$ rule. The order of rule applications doesn't matter for the sake of determining consistency, but the application of the $\sqcup$ rule does, as one choice can lead to a clash while the other not. \\ 
+If a clash happens in a deterministic implementation, we can backtrack to a previous $\sqcup$ decision with an unexplored choice and continue from there. If there are no unexplored $\sqcup$ decisions and we find a clash, $\K$ is inconsistent (no model exists).     
+If there is no decision with an unexplored possibility we can backtrack to, we can declare $\mathcal{K}$ to be inconsistent.
 
 
 
+
+ TODO: priklad s obrazkom, casova zlozitost, rozsirenie tableau pre ostatne spomenute deskripcne logiky.
 \section{OWL (mozno)}
 	TODO: definovat SHOIN
 \section{Použitia  (možno, spomenúť rôzne databázy)}
