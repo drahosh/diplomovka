@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="OWL abduction:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/OWL_abduction_jar</output-path>
+    <root id="archive" name="OWL abduction.jar">
+      <element id="module-output" name="OWL abduction" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/com/company/owllink-bin.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Desktop/owllinkapi-1.2.2/lib/owlapi-bin.jar" path-in-jar="/" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/com/company/owllink-bin.jar" />
+    </root>
+  </artifact>
+</component>
