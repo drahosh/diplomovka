@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="owllink-bin1">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/out/production/OWL abduction/com/company/owllink-bin.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
