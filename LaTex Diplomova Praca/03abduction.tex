@@ -1,5 +1,29 @@
 \chapter{Abduction}\label{chap:Abduction}
 
+Logical thinking can be divided into 3 categories: \textbf{Deduction}, \textbf{Induction} and \textbf{Abduction}. \\ \\
+\textbf{Deduction} is the process of using known causes and rules to infer the results of a rule. For example, if we know the fact that a floor is wet, and the rule that this particular floor is slippery when wet, we can arrive at a conclusion that the floor must be slippery. Deduction is the only one of the 3 types of logical reasoning where if the premises and rules used are true, then the conclusion must also be true. \\ 
+\textbf{Induction} is the process of knowing the cause and effect and creating a plausible rule. For example, we know that whenever we've seen this floor wet, it was also slippery, therefore, the floor is slippery when wet. Unlike deduction, induction the result of induction isn't necessarily correct. \\
+\textbf{Abduction}, also known as hypothesis or diagnosis, is when we know the rules and observe an effect, and try to find a plausible cause. For example a doctor may observe someone's symptoms, know which diseases cause which symptoms, and based on those rules guess which disease the patient may have. Like with induction, there is no certainty that the explanation we reach is correct.
 
-\section{Definition}
+\section{ABox Abduction in description logic}
+
+In descrtiption logic, we define inference through models.  For any sets of ABox and TBox axioms $\mathcal{A}$ and $\mathcal{B}$, $\mathcal{A} \models \mathcal{B}$ if there is no model of $\mathcal{A} \cup \neg \mathcal{B}$ ($\mathcal{A} \cup \neg \mathcal{B}$ is inconsistent).   \\
+In our algorithm, we do Abox abduction - that means both the observation and explanation can contain only ABox axioms - only the knowledge base can contain TBox axioms.
+When using abduction in description logic, we are looking for a set of explanations:
+\begin{mydef} \label{explanation} (explanation) 
+For a knowledge base $\K$ and an observation $\Obs$, a set of axioms $\E$ is an explanation when all of the following are true: 
+\begin{itemize}
+\item $\K \cup \E \models \Obs$.
+\item $\K \cup \E$ is consistent.
+\item $\E$ is relevant - $\E \not\models \Obs$.
+\item $\E$ is explanatory - $\K \not \models \Obs$.
+\end{itemize}  
+\end{mydef}
+For example, for a simple ontology where the Abox of knowledge base is empty and the Tbox=$\{ \mathcal{A} \sqsubseteq \mathcal{C} ; \mathcal{B} \sqsubseteq \mathcal{C} \} $, and an observation Abox=$\{a:\mathcal{C}\}$, these are some explanations: $\{ \{a:\mathcal{A}\},\{ a: \mathcal{B}\}\}$.   $\{a:\mathcal{C}\}$ is not an explanation, since it's irrelevant.\\
+However, you may see that there are also other possible explanations , for example $\{ a:\mathcal{A},  a:\mathcal{B} \}$,  $\{ a:\mathcal{A},  a:\neg \mathcal{B} \}$,  or even $\{ a:\mathcal{A} , a:\mathcal{D}, a:\neg \mathcal{G},...\}$, and many others, where $\mathcal{D}, \mathcal{G}$ are concepts not used for any rule in the knowledge base. For this reason, it also makes sense to only look for explanations that are syntactically minimal, which means they are not a superset of any other explanation. This would leave only the first two explanations,  $\{ \{a:\mathcal{A}\}$ and  $\{ \{a:\mathcal{B}\}$.
+
+
+
+TODO: Abduction as set cover, abduction as probability
 \section{Uses}
+TODO: Medical, automatic code checking, automatic planning, any type of diagnosis
