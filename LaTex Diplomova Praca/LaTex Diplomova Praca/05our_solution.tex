@@ -1,0 +1,18 @@
+\chapter{Our approach}\label{chap:proposal}
+The approach most often used to perform abductive reasoning in description logic without translating to other formal logics is based on the following thought:
+Let there be a knowledge base $\K$, observation $\Obs$, and a set of axioms $\S$. If $\K \sqcup \S$ is consistent, then by definition there is at least one model of $\K \sqcup \S$.  If $\K \sqcup \S \sqcup \neg \Obs$ is inconsistent, then there is no model for $\K \sqcup \S$ where $\neg \Obs$ is not true, that is every model of $\K \sqcup \S$ contains $\Obs$, so $\K \sqcup \S \models \Obs$. \\ \\
+We can find such a set $\S$ by generating every model of $\K \sqcup \neg \Obs$, and picking a set of complements of axiom in these models so that every model has at least one axiom complement in $\S$. This can be formulated as the hitting set problem (which is equivalent to the set cover problem) - for each model in the set of models $M$ of  $\K \sqcup \neg \Obs$, we create an \textbf{antimodel} consisting of negations of every axiom in the model, the set of these antimodels we call $M'$. Our goal is finding a minimal (inclusion-wise) set $\S$ containing at least one axiom from each antimodel in $M'$ - $\S$ a hitting set for $M$.
+\\
+
+Additionally, if $\S$ is relevant and explanatory (\ref{explanation}) and $\K \sqcup \S$ is consistent, it's an explanation for observation $\Obs$.
+\\ \\
+This idea was first introduced by Raymond Reiter in ''A Theory of Diagnosis from First Principles" \cite{Reiter1987} as a general method for abductive reasoning in any formal logic with binary semantics (every statement is either true or false) and operands $\land , \lor, \neg$  with their usual semantic meaning, including first order logic. Additionally, Reiter proposes using a hitting set tree, which we will describe with the algorithm our work is based on.
+
+
+ Ken Halland and Katarina Britz in '' ABox abduction in ALC using a DL tableau" \cite{halland2012} proposed an algorithm using the idea of hitting sets for abduction in description logic ALC, using a modified tableaux algorithm - their algorithm first develops all possible completion graphs (multiple graphs resulting from the use of $\sqcup$ rule), based on the knowledge base, and once there are no more rules to apply, they add an axiom from the observation complement $\neg \Obs$ to the knowledge base. If there is no rule to apply or unused observation, the model is added to the list of models from which minimal hitting set is generated. \\ This algorithm generates every model reachable by tableaux algorithm for $\K \sqcup \Obs$, which as we will show, is not necessary. \\ \\
+Our work is mainly based on the algorithm by Martin Homola and Júlia Pukancová, using hitting set tree, which make generating every model of $\K \sqcup \neg \Obs$ not necessary.
+
+
+%\section{Explanation of our algorithm}
+
+
