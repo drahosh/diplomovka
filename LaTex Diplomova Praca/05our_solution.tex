@@ -5,14 +5,37 @@ We can find such a set $\S$ by generating every model of $\K \sqcup \neg \Obs$, 
 \\
 
 Additionally, if $\S$ is relevant and explanatory (\ref{explanation}) and $\K \sqcup \S$ is consistent, it's an explanation for observation $\Obs$.
-\\ \\
-This idea was first introduced by Raymond Reiter in ''A Theory of Diagnosis from First Principles" \cite{Reiter1987} as a general method for abductive reasoning in any formal logic with binary semantics (every statement is either true or false) and operands $\land , \lor, \neg$  with their usual semantic meaning, including first order logic. Additionally, Reiter proposes using a hitting set tree, which we will describe with the algorithm our work is based on.
+\\ 
+
+\begin{mydef} \label{HS} (Hitting set  (TODO: cituj paper)) \\
+A hitting set for a collection of
+sets F (in our case, F is the collection of antimodels) is a set H s.t. $H \cap S \neq  \{\}$ for every S $\in$ F. A hitting set H for F is
+minimal if there is no other hitting set H' for F s.t. $H' \not \subseteq H$.
+\end{mydef}
+\begin{mydef} \label{Antimodel} 
+To better explain our algorithm, it will be useful to define the term 'antimodel'. Let M be a model of knowledge base $\K$. Then M' is an antimodel of $\K$ iff it contains negations of every axiom from M and nothing else - for every axiom of form $a:C$ in M, M' has $a:\neg C$, and for every axiom $a,b:R$ in M it has $a,b:\neg R$ (a and b are not in role R). (TODO: toto asi pre niektore deskripcne logiky nieje mozne vyjadrit, (role complements))
+\end{mydef}
+This idea was first introduced by Raymond Reiter in ''A Theory of Diagnosis from First Principles" \cite{Reiter1987} as a general method for abductive reasoning in any formal logic with binary semantics (every statement is either true or false) and operands $\land , \lor, \neg$  with their usual semantic meaning, including first order logic. Additionally, Reiter proposes using a hitting set tree, which we will describe later.
 
 
  Ken Halland and Katarina Britz in '' ABox abduction in ALC using a DL tableau" \cite{halland2012} proposed an algorithm using the idea of hitting sets for abduction in description logic ALC, using a modified tableaux algorithm - their algorithm first develops all possible completion graphs (multiple graphs resulting from the use of $\sqcup$ rule), based on the knowledge base, and once there are no more rules to apply, they add an axiom from the observation complement $\neg \Obs$ to the knowledge base. If there is no rule to apply or unused observation, the model is added to the list of models from which minimal hitting set is generated. \\ This algorithm generates every model reachable by tableaux algorithm for $\K \sqcup \Obs$, which as we will show, is not necessary. \\ \\
-Our work is mainly based on the algorithm by Martin Homola and Júlia Pukancová, using hitting set tree, which make generating every model of $\K \sqcup \neg \Obs$ not necessary.
+Our work is mainly based on the algorithm by Martin Homola and Júlia Pukancová, using the idea of a hitting set tree from Reiter \cite{Reiter1987}, which make generating every model of $\K \sqcup \neg \Obs$ not necessary. 
 
+\begin{mydef} \label{HSTree} (Hitting set tree  (TODO: reference))
+	A hitting set tree (HS-tree) for a collection of sets F is T = (V, E, L, H), where
+	(V, E) is the smallest tree in which the labelling function L labels the nodes of V
+	by elements of F, the edges of E by elements of sets in F, and H(n) is the set
+	of edge-labels from the root node to n $\in$ V , s.t.: \begin{itemize} \item (a)
+		 for the root r $\in$ V : L(r) = S for some S $\in$ F, if F $\neq \{\}$, otherwise L(r) = \{\}; 
+\item(b) for each n $\in$ V : L(n) = S
+	for some S $\in$ F s.t. S $\cap$ H(n) = \{\}, if such S $\in$ F exists, otherwise L(n) = \{\};
+\item	(c) each n $\in$ V has a successor $n_\sigma $ for each $\sigma \in L(n)$ with $L(n, n_\sigma ) = \sigma$.
+\end{itemize}
+\end{mydef}
 
+We can generate the HS-tree inf the following way: let F be the list of antimodels for $\K \cap \neg \Obs$ . The label of each vertex n is either an antimodel of $\K \cap H(n) \cap \neg \Obs$ (which is also an antimodel of $\K \cap \neg \Obs$) or empty, if no such model exists - in this case H(n) is a hitting set of F, and $\K \cap H(n) \models \Obs$ - H(n) is an explanation of H(n) if it also fulfills the other conditions (\ref{explanation}). If the vertex n is labeled by an antimodel, we create a child vertex for each axiom of antimodel L(n) - we label the edge by that axiom. \\
+By using a HS-tree, we can find a hitting set that hits every antimodel of $\K \cap \neg \Obs$ while having to generate only a few of these models - each choice of edge label usually also eliminates many models that were not generated. 
+The H and P (TODO ref) algorithm uses this algorithm, combined with the pruning methods (for example, eliminate a vertex n if H(n) contains axioms \{A , $\neg$ A \} (inconsistent with itself) or if there is a vertex n' with emply label (either due to pruning or being a hitting set) and $H(n') \subseteq H(n)$, or if there is a vertex n' where H(n) = H(n')).   
 %\section{Explanation of our algorithm}
 
 
