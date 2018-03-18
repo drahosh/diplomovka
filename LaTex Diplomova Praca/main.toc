@@ -1,0 +1,22 @@
+\select@language {slovak}
+\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}
+\contentsline {chapter}{\numberline {2}Description logic}{2}{chapter.2}
+\contentsline {section}{\numberline {2.1}Introduction to description logic}{2}{section.2.1}
+\contentsline {section}{\numberline {2.2}Selected description logics}{5}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}$\mathcal {ALC}$}{5}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}$\mathcal {SHIQ}$}{8}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.3}$\mathcal {ALCHO}$}{10}{subsection.2.2.3}
+\contentsline {subsection}{\numberline {2.2.4}$\mathcal {SROIQV(D)}$}{11}{subsection.2.2.4}
+\contentsline {section}{\numberline {2.3}tableau algorithm}{11}{section.2.3}
+\contentsline {chapter}{\numberline {3}Abduction}{16}{chapter.3}
+\contentsline {section}{\numberline {3.1}Abduction in description logic}{18}{section.3.1}
+\contentsline {subsection}{\numberline {3.1.1}ABox abduction}{19}{subsection.3.1.1}
+\contentsline {section}{\numberline {3.2}Uses}{19}{section.3.2}
+\contentsline {chapter}{\numberline {4}Previous abduction solvers}{20}{chapter.4}
+\contentsline {section}{\numberline {4.1}theoretical approaches}{20}{section.4.1}
+\contentsline {section}{\numberline {4.2}implemented solutions}{20}{section.4.2}
+\contentsline {chapter}{\numberline {5}Our approach}{21}{chapter.5}
+\contentsline {section}{\numberline {5.1}Our algorithm}{25}{section.5.1}
+\contentsline {chapter}{\numberline {6}Implementation}{26}{chapter.6}
+\contentsline {chapter}{\numberline {7}Results}{29}{chapter.7}
+\contentsline {chapter}{\numberline {8}Conclusion}{30}{chapter.8}

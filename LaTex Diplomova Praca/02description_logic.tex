@@ -152,28 +152,29 @@ $\mathcal{SHIQ}$ is one of the most expressive description logics.
 
 Examples of Concepts in \textbf{$\mathcal{SHIQ}$}:
 \begin{myex} \cite{handbook}
+Examples of Concepts in \textbf{$\mathcal{SHIQ}$}: \\
 $ Human  \sqcap \neg Female \sqcap \exists married.Doctor \\
  \sqcap (\geq 5  hasChild) \sqcap \forall hasChild.Professor $ .
-\end{myex}
+
 ''A man that is married to a doctor and has at least five
 children, all of whom are professors''.
-\begin{myex} \cite{handbook}
+
 $Human \sqsubseteq \forall hasParent.Human \sqcap (\geq 2 hasParent.\top) \\
  \sqcap (\leq 2 hasParent.\top) 
 \sqcap \forall hasParent^-.Human$
-\end{myex}
+
 ''If someone is a human, all their parents are human. they have exactly two parents, and everything that has them as a parent (i.e. is their child) is a human.''
-\begin{myex}
-\label{rolehierarchy}
- \cite{handbook}\\
+
 $hasParent \sqsubseteq hasAnccestor$.
-\end{myex}
+
 ''hasParent is a subrole of hasAncestor (i. e. If A hasparent.B , then A hasAncestor.B).''
-\begin{myex}
+
+
 Trans(hasAncestor) 
-\end{myex}
+
 ''The role hasAncestor is transitive (i.e. if A hasAncestor.B and B hasAncestor.C then A hasAncestor.C).'' \\
-\\
+\end{myex}
+
 The definitions of syntax and semantics of $\mathcal{SHIQ}$ are similar to those of $\mathcal{ALC}$.
 \begin{mydef} 
 \cite{handbook} ($\mathcal{SHIQ}$ concept and role syntax) Let R be a set of role names, which is partitioned into a set $R_+$ of transitive roles and a set $R_p$ of normal roles. 
@@ -323,37 +324,38 @@ If a clash happens in a deterministic implementation, we can backtrack to a prev
 If there is no decision with an unexplored possibility we can backtrack to, we can declare $\mathcal{K}$ to be inconsistent. 
 I think it would be useful to show an example of tableau completion graph:
 \\
-\begin{myex}
-\begin{align*}
-  \K &= \left\{
-      \begin{aligned}
-       \mathsf{Girl} & \sqsubseteq \exists \mathsf{owns}.\mathsf{Barbie} \\
-       \mathsf{Girl} & \sqsubseteq \forall \mathsf{owns}.\neg\mathsf{Toy} \\       
- 		\mathsf{Barbie} & \sqsubseteq \mathsf{Toy} \\
-  		\mathsf{mary} & \colon \mathsf{Girl}
-      \end{aligned}
-    \right\}\\
-  \end{align*}
-
-  \medskip
-  \begin{center}
-  \begin{tikzpicture}[-latex ,auto ,node distance =0.5 cm and 0.5 cm,on grid , semithick]
-	\node[draw,circle,inner sep=2pt,fill] (a) at (0,0) {};
-	\node (a1) [above left=of a] {$\mathsf{mary}$}; 
-	\node (a2) [below left=of a] {$\{\mathsf{Girl}\}$}; 
-	\node[draw,circle,inner sep=2pt,fill] (b) at (6,0) {}; 
-	\path (a) edge [bend right = -15] node[above =0.15 cm] {$\mathsf{owns}$} (b); 
-	\node (b1) [above right=of b] {$\mathsf{b_1}$}; 
-	\node (b2) [below left=of b] {$\{\mathsf{Barbie}, \mathsf{Toy},$}; 
-	\node (b3) [right=1.6cm of b2] {{$\neg\mathsf{Toy}$}$\}$};
-	\end{tikzpicture}  
-  \end{center}
-In this case, the tableau algorithm stops on a contradiction - mary must own a barbie and no toys, but barbie is a toy, so b1 is supposed to both be a toy and not be a toy. \\
-Note that this picture shows only partial labels, the full label for mary according to expansion rules could be $\{ \neg Girl \sqcup \exists owns.Barbie, \exists owns.Barbie, \neg Girl \sqcup \forall owns.\neg Toy, \forall owns.\neg Toy, \neg Barbie \sqcup Toy, \neg Barbie \}$
-\end{myex}
-
-
-
+obrazok odstraneny, nejake problemy s hboxom a nemoznostou lomit riadok.
+%\begin{myex}
+%\begin{align*}
+%  \K &= \left\{
+%      \begin{aligned}
+%       \mathsf{Student} & \sqsubseteq \exists \mathsf{owns}.\mathsf{Textbook} \\       
+% 		\mathsf{Textbook} & \sqsubseteq \mathsf{Book} \\
+%  		\mathsf{tom} & \colon \mathsf{Student}
+%      \end{aligned}
+%    \right\}\\
+%  \end{align*}
+%
+%  \medskip
+%  \begin{center}
+%  \begin{tikzpicture}[-latex ,auto ,node distance =0.5 cm and 0.5 cm,on grid , semithick]
+%	\node[draw,circle,inner sep=2pt,fill] (a) at (0,0) {};
+%	\node (a1) [above left=of a] {$\mathsf{tom}$}; 
+%	\node (a2) [below left=of a] {$\{\mathsf{Student}, \neg \mathsf{Student} \sqcup \exists \mathsf{owns}.\mathsf{Textbook}, 
+%\exists \mathsf{owns}.\mathsf{Textbook}, \neg \mathsf{Textbook} \sqcup Book,\\ \neg \mathsf{Textbook} }\}$}; 
+%	\node[draw,circle,inner sep=2pt,fill] (b) at (6,0) {}; 
+%	\path (a) edge [bend right = -15] node[above =0.15 cm] {$\mathsf{owns}$} (b); 
+%	\node (b1) [above right=of b] {$\mathsf{b_1}$}; 
+%	\node (b2) [below left=of b] {$\{\mathsf{Barbie}, \mathsf{Toy},$}; 
+%	\node (b3) [right=1.6cm of b2] {{$\neg\mathsf{Toy}$}$\}$};
+%	\end{tikzpicture}  
+%  \end{center}
+%In this case, the tableau algorithm stops on a contradiction - mary must own a barbie and no toys, but barbie is a toy, so b1 is supposed to both be a toy and not be a toy. \\
+%Note that this picture shows only partial labels, the full label for mary according to expansion rules could be $\{ \neg Girl \sqcup \exists owns.Barbie, \exists owns.Barbie, \neg Girl \sqcup \forall owns.\neg Toy, \forall owns.\neg Toy, \neg Barbie \sqcup Toy, \neg Barbie \}$
+%\end{myex}
+%
+%
+%
 
 % TODO: priklad s obrazkom, casova zlozitost, rozsirenie tableau pre ostatne spomenute deskripcne logiky.
 %\section{OWL (mozno)}

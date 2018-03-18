@@ -1,7 +1,7 @@
 \chapter{Our approach}\label{chap:proposal}
-The approach most often used to perform abductive reasoning in description logic without translating to other formal logics is based on the following thought:
+The approach most often used to perform abductive reasoning in description logic without translating to other formal logics is based on the following approach:
 Let there be a knowledge base $\K$, observation $\Obs$, and a set of axioms $\S$. If $\K \sqcup \S$ is consistent, then by definition there is at least one model of $\K \sqcup \S$.  If $\K \sqcup \S \sqcup \neg \Obs$ is inconsistent, then there is no model for $\K \sqcup \S$ where $\neg \Obs$ is not true, that is every model of $\K \sqcup \S$ contains $\Obs$, so $\K \sqcup \S \models \Obs$. \\ \\
-We can find such a set $\S$ by generating every model of $\K \sqcup \neg \Obs$, and picking a set of complements of axiom in these models so that every model has at least one axiom complement in $\S$. This can be formulated as the hitting set problem (which is equivalent to the set cover problem) - for each model in the set of models $M$ of  $\K \sqcup \neg \Obs$, we create an \textbf{antimodel} consisting of negations of every axiom in the model, the set of these antimodels we call $M'$. Our goal is finding a minimal (inclusion-wise) set $\S$ containing at least one axiom from each antimodel in $M'$ - $\S$ a hitting set for $M$.
+We can find such a set $\S$ by generating every model of $\K \sqcup \neg \Obs$, and picking a set of complements of axiom in these models so that every model has at least one axiom complement in $\S$. This can be formulated as the hitting set (defined below \ref{HS}) problem (which is equivalent to the set cover problem) - for each model in the set of models $M$ of  $\K \sqcup \neg \Obs$, we create an \textbf{antimodel} (\ref{Antimodel})consisting of negations of every axiom in the model, the set of these antimodels we call $M'$. Our goal is finding a minimal (inclusion-wise) set $\S$ containing at least one axiom from each antimodel in $M'$ - $\S$ a hitting set \ref{HS} for $M'$.
 \\
 
 Additionally, if $\S$ is relevant and explanatory (\ref{explanation}) and $\K \sqcup \S$ is consistent, it's an explanation for observation $\Obs$.
@@ -35,7 +35,19 @@ Our work is mainly based on the algorithm by Martin Homola and Júlia Pukancová
 
 We can generate the HS-tree inf the following way: let F be the list of antimodels for $\K \cap \neg \Obs$ . The label of each vertex n is either an antimodel of $\K \cap H(n) \cap \neg \Obs$ (which is also an antimodel of $\K \cap \neg \Obs$) or empty, if no such model exists - in this case H(n) is a hitting set of F, and $\K \cap H(n) \models \Obs$ - H(n) is an explanation of H(n) if it also fulfills the other conditions (\ref{explanation}). If the vertex n is labeled by an antimodel, we create a child vertex for each axiom of antimodel L(n) - we label the edge by that axiom. \\
 By using a HS-tree, we can find a hitting set that hits every antimodel of $\K \cap \neg \Obs$ while having to generate only a few of these models - each choice of edge label usually also eliminates many models that were not generated. 
-The H and P (TODO ref) algorithm uses this algorithm, combined with the pruning methods (for example, eliminate a vertex n if H(n) contains axioms \{A , $\neg$ A \} (inconsistent with itself) or if there is a vertex n' with emply label (either due to pruning or being a hitting set) and $H(n') \subseteq H(n)$, or if there is a vertex n' where H(n) = H(n')).   
-%\section{Explanation of our algorithm}
+The H and P (TODO ref) algorithm uses this algorithm, combined with the pruning methods (for example, eliminate a vertex n if H(n) contains axioms \{A , $\neg$ A \} (inconsistent with itself) or if there is a vertex n' with emply label (either due to pruning or being a hitting set) and $H(n') \subseteq H(n)$, or if there is a vertex n' where H(n) = H(n')).    \\
+\\
+This algorithm works for single observations, like \{a:C\} , \{a,b:R\} or \{ $a:(A \sqcap B) \sqcup C $\}, but not for multiple observations, for example $\mathcal{MO}$ \{a:A,b:B\}. We can obtain their explanations by finding explanations of every single observation, performing carthesian multiplication (TODO: spravne vyjadrenie? mozno konjunkcia ako kartezianskym sucinom?) over the resulting sets of explanations, and finally checking the resulting explanations for consistency with $\K \cup \mathcal{MO}$ and relevancy with $\K \cup \Obs$ for every single observation $\Obs \in \mathcal{MO} $, and the resulting observations are then checked for minimality against each other. For example, in the knowledge base $\K$, if the explanations for \{a:A\} are \{\{b:B;a:C\} , \{a:D\} \} and the explanations for \{b:B\} are \{\{b:C\},\{b:D;b,a:R\}\}, the explanation candidates before consistency and relevancy checking for observation \{a:A,b:B\} are \{\{b:B,a:C,b:C\},\{b:B;a:C;b:D;b,a:R\},\{a:D;b:C\},\{a:D;b:D;b,a:R\}\}. since  $ \{b:B\} \models \{b:B\}$ , the explanation candidates  \{b:B,a:C,b:C\},\{b:B;a:C;b:D;b,a:R\} are cut for relevancy. Let's say the remaning candidates ,\{a:D;b:C\},\{a:D;b:D;b,a:R\} are consistent with $\K$, then they are explanations of $\mathcal{MO} = \{a:A ; b:B\}$. \\
+TODO: the paradox ($a:A \sqcup B$ nie je to iste ako \{a:A, a:B\})
+
+
+\section{Our algorithm}
+Our algorithm is based on the H and P algorithm (TODO: ref), some main differences:
+\begin{enumerate}
+\item We do not use the formalism of the HS-tree, instead we only remember the hitting set candidates (the equivalent of vertex in HS-tree) for depth d and are building a set of hitting set candidates for depth d+1
+\item When generating antimodels, we do not generate axioms when either they or their complements are in the  $\K \cup \Obs$
+\item We check for relevancy and consistency of HS candidates when they are generated, instead of at the end of the algorithm.
+\item (TODO: Minimum inconsistent set)
+\end{enumerate}
 
 
