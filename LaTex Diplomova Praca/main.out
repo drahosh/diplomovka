@@ -1,0 +1,21 @@
+\BOOKMARK [0][-]{chapter.1}{Introduction}{}% 1
+\BOOKMARK [0][-]{chapter.2}{Description logic}{}% 2
+\BOOKMARK [1][-]{section.2.1}{Introduction to description logic}{chapter.2}% 3
+\BOOKMARK [1][-]{section.2.2}{Selected description logics}{chapter.2}% 4
+\BOOKMARK [2][-]{subsection.2.2.1}{ALC}{section.2.2}% 5
+\BOOKMARK [2][-]{subsection.2.2.2}{SHIQ}{section.2.2}% 6
+\BOOKMARK [2][-]{subsection.2.2.3}{ALCHO}{section.2.2}% 7
+\BOOKMARK [2][-]{subsection.2.2.4}{SROIQV\(D\)}{section.2.2}% 8
+\BOOKMARK [1][-]{section.2.3}{tableau algorithm}{chapter.2}% 9
+\BOOKMARK [0][-]{chapter.3}{Abduction}{}% 10
+\BOOKMARK [1][-]{section.3.1}{Abduction in description logic}{chapter.3}% 11
+\BOOKMARK [2][-]{subsection.3.1.1}{ABox abduction}{section.3.1}% 12
+\BOOKMARK [1][-]{section.3.2}{Uses}{chapter.3}% 13
+\BOOKMARK [0][-]{chapter.4}{Previous abduction solvers}{}% 14
+\BOOKMARK [1][-]{section.4.1}{theoretical approaches}{chapter.4}% 15
+\BOOKMARK [1][-]{section.4.2}{implemented solutions}{chapter.4}% 16
+\BOOKMARK [0][-]{chapter.5}{Our approach}{}% 17
+\BOOKMARK [1][-]{section.5.1}{Our algorithm}{chapter.5}% 18
+\BOOKMARK [0][-]{chapter.6}{Implementation}{}% 19
+\BOOKMARK [0][-]{chapter.7}{Results}{}% 20
+\BOOKMARK [0][-]{chapter.8}{Conclusion}{}% 21
