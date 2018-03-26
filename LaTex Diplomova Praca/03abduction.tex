@@ -4,8 +4,11 @@ Logical thinking can be divided into 3 categories: \textbf{Deduction}, \textbf{I
 \textbf{Deduction} is the process of using known causes and rules to infer the results of a rule. For example, if we know the fact that a floor is wet, and the rule that this particular floor is slippery when wet, we can arrive at a conclusion that the floor must be slippery. Deduction is the only one of the 3 types of logical reasoning where if the premises are true and the rules used are true, then the conclusion must also be true. \\ 
 \textbf{Induction} is the process of knowing the cause and effect and creating a plausible rule. For example, we know that whenever we've seen this floor wet, it was also slippery, therefore, the floor is slippery when wet. Unlike deduction, induction the result of induction isn't necessarily correct. \\
 \textbf{Abduction}, also known as hypothesis or diagnosis, is when we know the rules and observe an unexpected effect, and try to find an explanation for it - a plausible cause. For example, we if we see someone slip on the floor and know that the floor is slippery when wet, we may assume that the floor is wet. Another example of abductive reasoning is when a doctor observes patients symptoms, knows which diseases cause which symptoms, and based on these rules guess which disease the patient may have. Like with induction, there are often multiple plausible explanation, and the true explanation may not be among them even if all the information we have is correct; the person who slipped on the floor may have slippery shoes, or the patient could have a new diease unknown to the doctor.\\ 
-If the only condition for $\E$ being an abductive explanation for observation $\Obs$ in knowledge base $\K$ was that $\K \sqcup \E \models \Obs$, we would reach some unintuitive explanations, for example for $\Obs$=''The floor is slippery'' and $\K$ = ''The floor is slippery when wet'' , $\E$ could be ''The floor is slippery'' (as in first order logic $A \to A$) or  ''The sun is shining and the sun is not shining'' ($\neg A \to A \to B$) or ''The floor is wet and a bird is chirping'' (irrelevant information) . To limit ourselves only to more usefull explanations, we will also add some restrictions to our definition of logical abduction for the purpose of our work:
 
+
+
+\section{Abduction in description logic}
+If the only condition for $\E$ being an abductive explanation for observation $\Obs$ in knowledge base $\K$ was that $\K \cup \E \models \Obs$, we would reach some unintuitive explanations, for example for $\Obs$=''The floor is slippery'' and $\K$ = ''The floor is slippery when wet'' , $\E$ could be ''The floor is slippery'' (as in first order logic $A \to A$) or  ''The sun is shining and the sun is not shining'' ( $A \cap \neg A \models B$, since $X \models Y$ if there is no model of $X \cup \neg Y$) or ''The floor is wet and a bird is chirping'' (irrelevant information) . To limit ourselves only to more usefull explanations, we will also add some restrictions to our definition of logical abduction for the purpose of our work:
 \begin{mydef} \label{explanation1} (Abductive explanation) \cite{elsenbroich} \\
 Set of axioms $\E$ is an explanation of observation $\Obs$ in knowledge base $\K$, iff:
 \begin{itemize}
@@ -15,24 +18,19 @@ Set of axioms $\E$ is an explanation of observation $\Obs$ in knowledge base $\K
 \item Explanatoriness : $\K \not\models \Obs$
 \item Minimality: There is no other explanation $\mathcal{F}$ of $\Obs$ in $\K$, where $\mathcal{F} \subset \E$
 \end{itemize}
-
-(TODO: v elsenbroich namiesto $\cup$ je +, myslim ze tu sa asi viac hodi $\cup$ ale niesom si isty)
 \end{mydef}
+Elsenbroich et. al. \cite{elsenbroich} defined several types of abduction in description logig : Concept abduction, TBox abduction, ABox abduction and Knowledge base abduction. We are mainly interested in the ABox abduction, but there we will also mention shortly describe. \\
+\textbf{Concept abduction} is the simplest of the 4: for a knowledge base $\K$ and the observation - concept $\mathcal{C}$, we are looking for a concept $\mathcal{D}$ so that $\K \models \mathcal{D} \sqsubseteq \mathcal{C} $.	
+\textbf{TBox abduction} is the process of finding a finite set of TBox rules $\mathcal{S}_t$ for knowledge base $\K$ and concepts $\mathcal{C},\mathcal{D}$ satisfiable w.r.t. $\K$, so that $\K \cup \mathcal{S}_t  \models 	\mathcal{C} \sqsubseteq \mathcal{D} $ . This type of abduction is used for ontology debugging : If an ontology engineer expects $\mathcal{C} \sqsubseteq \mathcal{D}$ to follow from $\K$ but finds it doesn't, they can look for TBox rules to add to $\K$. On the other hand, if an undesirable $\mathcal{C} \sqsubseteq \mathcal{D}$ follows from the ontology, they can find such $\mathcal{S}_t$ from $\K$ so that $\K - \mathcal{S}_t \not\models \mathcal{C} \sqsubseteq \mathcal{D}$ .  \\
+\textbf{Knowledge base abduction} is an abduction where both the observation and the explanation can contain both TBox and ABox axioms.  (TODO: najst sposob ako povedat ze sme nenasli algoritmus alebo aplikaciu)
 
-From our previous example, ''The floor is slippery'' is not an explanation due to the relevancy condition, ''The sun is shining and not shining'' due to the consistency condition, and ''The floor is wet and a bird is chirping'' because of the minimality condition, while ''The floor is wet'' fulfills all the conditions and therefore is an explanation of $\Obs$. \\
-If the $\K$ was ''The floor is slippery when wet and the floor is wet'' and $\O$ was ''The floor is slippery'', there would be no explanation due to the explanatoriness condition - the observation can already be inferred from the knowledge base using deductive reasoning.
 
-\section{Abduction in description logic}
-Elsenbroich et. al. \cite{elsenbroich} defined several types of abduction in description logic: TBox abduction, ABox abduction and Concept abducion. We are mainly interested in the ABox abduction. \\
-\textbf{TBox abduction} is the process of finding a finite set of TBox rules $\mathcal{S}_t$ for knowledge base $\K$ and concepts $\mathcal{C},\mathcal{D}$ satisfiable w.r.t. $\K$, so that $\K \cup \mathcal{S}_t  \models 	\mathcal{C} \sqsubseteq \mathcal{D} $ . This type of abduction is used for ontology debugging : If an ontology engineer expects $\mathcal{C} \sqsubseteq \mathcal{D}$ to follow from $\K$ but finds it doesn't, they can look for TBox rules to add to $\K$. On the other hand, if an undesirable $\mathcal{C} \sqsubseteq \mathcal{D}$ follows from the ontology, they can find such $\mathcal{S}_t$ from $\K$ so that $\K - \mathcal{S}_t \not\models \mathcal{C} \sqsubseteq \mathcal{D}$ . 
-(TODO: je - spravny vyraz? a ake je vlaste previdlo pre to kde vsade ma ist mathcal?)
-\\
-TODO: Concept abduction \\
-TODO: co povedat o knowledge base abduction abduction? 
 
 \subsection{ABox abduction}
-In ABox abduction, we are looking for an explanation $\E$ of observation $\Obs$ in knowledge base $\K$ according to rules \ref{explanation1}, where both $\E$ abd $\Obs$ are limited to ABox axioms. \\
+In ABox abduction, we are looking for an explanation $\E$ of observation $\Obs$ in knowledge base $\K$ according to rules \ref{explanation1}, where both $\E$ abd $\Obs$ are limited to ABox axioms. \\ 
 %In descrtiption logic, we define inference through models.  For any sets of ABox and TBox axioms $\mathcal{A}$ and $\mathcal{B}$, $\mathcal{A} \models \mathcal{B}$ if there is no %model of $\mathcal{A} \cup \neg \mathcal{B}$ ($\mathcal{A} \cup \neg \mathcal{B}$ is inconsistent).   \\
+
+
 
 For example, for a simple ontology where the Abox of the knowledge base is empty and the Tbox=$\{ \mathcal{A} \sqsubseteq \mathcal{C} ; \mathcal{B} \sqsubseteq \mathcal{C} \} $, and an observation Abox=$\{a:\mathcal{C}\}$, there are  explanations: $\{ \{a:\mathcal{A}\},\{ a: \mathcal{B}\}\}$.   $\{a:\mathcal{C}\}$ is not an explanation due to the relevancy requirement, $\{ a:\mathcal{A}, a:\mathcal{B} \}$ is not and explanation due to the minimality requirement. \\
 

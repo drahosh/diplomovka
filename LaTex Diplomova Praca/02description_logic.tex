@@ -24,40 +24,52 @@ and relations, being represented, respectively, by unary and binary predicates.
 languages that can be used to represent an ontology
 in a structured and formally well-understood way. The ''description'' part of their name is based on how the important notions of the domain
 are described by concept descriptions (unary predicates) and atomic roles (binary predicates). The ''logic'' part comes from their formal, logic-based semantics,
-unlike some other methods of representation of ontologies, for example semantic networks. 
-\\ \textbf{Knowledge base} (a set of facts) in description logics typically comes in two parts: a terminological part (\textbf{TBox}) and an assertional part(\textbf{ABox}).\\
-\textbf{TBox} consists of general statements about concepts. Some examples,: 
-\begin{myex}
-\label{complexConcept}
- \cite{handbook2} 
-$HappyMan  \equiv   Human  \sqcap  \neg  Female  \sqcap  (\exists  married.Doctor) \sqcap
-(\forall  hasChild.(Doctor  \sqcup  Professor)).$
+unlike some other methods of representation of ontologies, for example semantic networks. In \textbf{DLs}, ontology is represented by a knowledge base.
+\begin{mydef} (Knowledge base)
+A Knowledge base is an ordered pair ($\T,\A$) where $\T$ is the terminological part (\textbf{TBox}) and $\A$ is the assertional part (\textbf{ABox}). 
+\end{mydef}
+\begin{mydef} (GCI, TBox)
+The terminological part of a knowledge base, \textbf{Tbox}, is a finite set of general concept inclusions.
+A general concept inclusion (\textbf{GCI}) is a statement of the form $A \sqsubseteq B$ , where A and B are concepts. \\
+The definition of a concept varies depending on the \textbf{DL}, for a definition in ALC, see \ref{ALCsyntax}.
+\end{mydef}
+\begin{myex} \label{TBoxEx}(GCI) 
+Examples of \textbf{GCIs} in description logic ALC, and their equivalents in natural language (note that conventionally, concept names start with an uppercase letter, while individual and role names start with a lowercase letter) : \\
+\begin{itemize}
+\item $Human \sqsubseteq \forall hasChild.Human$ \\
+''If someone is a human, then all their children are also human'' 
+\item  $ Human  \sqcap  \neg  Female  \sqcap  (\exists  married.\top) \sqcap
+(\forall  hasChild.(Doctor  \sqcup  Professor)) \sqsubseteq HappyMan $  \\
+''A human who is not female, is married, and every child he has is either a doctor or a proffesor, is a happy man.'' \\
+Note that $\top$ is a special concept, meaning ''everything'' - every individual is an instance of this concept. Similarily, there is a special concept $\bot$, or ''nothing'' - no individual is an instance of this concept. 
+
+\item $Painter \equiv \exists hasPainted.Picture$ \\
+$ A \equiv B$ is a shorter version of $(A \sqsubseteq B)  \land (B \sqsubseteq A)$, so this statement means
+''If someone has painted a picture, they are a painter, and if someone is a painter, they have painted a picture''. 
+\end{itemize}
 \end{myex}
-This example defines a concept, 'HappyMan',  as a human who is not female, is married to a doctor and his every child is a doctor or a professor.
-\begin{myex} \cite{handbook2}
-$\exists hasChild.Human \sqsubseteq Human$
-\end{myex}
-Or, in natural language, if someone has a child that is human, then they are human. \\
-\textbf{ABox} consists of specific statements about individuals. 
+\begin{mydef} (ABoxEx)
+\textbf{ABox} consists of 2 types of statements about individuals : concept assertions and role assertions. \\
+Concept assertions have the form $a : C$ where a is an individual and C is a concept. \\
+Role assertions have the form $a,b:R$ where a,b are individuals and R is a role.   
+\end{mydef}
 \begin{myex} 
 \label{ABox}
-\cite{handbook2}
-bob : HappyMan \\
-bob,mary : hasChild\\
-mary : $\neg$Doctor
+Some examples of ABox statements, with no natural language translations as their meaning is obvious: 
+\begin{itemize}
+\item $Alice : Human$ 
+\item $michelangelo : Painter \sqcap Sculptor$ 
+\item $daVinci , monaLisa : hasPainted$
+\end{itemize}
 \end{myex}
-This is an \textbf{ABox} of 3 statements: Bob is a happy man, Bob has a child - Mary, and Mary is not a doctor.
-You may notice that if we had a knowledge base consisting of TBox \ref{complexConcept} and ABox \ref{ABox}, we may deduce  that Mary must be a professor.
 
-\textbf{Interpretation} of description logics is done using sets. We will formally define interpretations with specific description logics, but to informally make sense of previous examples: \\
-\textbf{Concepts} can be interpreted as sets of constants,\\ \textbf{individuals} can be interpreted as constants,\\ \textbf{relations} as a set of pairs of constants,\\ \textbf{$\sqcap$} as set conjunction $\cap$, \\ \textbf{$\sqcup$} as set disjunction $\cup$,\\ $\neg$ as set complement,\\ $\sqsubseteq$ as subset symbol $\subseteq$,\\ \textbf{existential restriction} $\exists \textbf{r.C}$ as a set of constants that are in relation \textbf{r} with at least one individual in concept \textbf{C},\\ and \textbf{universal restriction} $\forall$ \textbf{r.C} as a set of constants that are not in relation \textbf{r} with any constant in complement of \textbf{C}. \\Also, A $\equiv$ B means ''A $\sqsubseteq$ B and B $\sqsubseteq$ A''.  
-
+\textbf{Interpretation} of description logics is done using sets. Although formal definitions vary based on the type of description logic, the general idea is that we create a set of objects, assign one object to every individual, interpret concepts as sets of objects and roles as sets of ordered doubles of objects. A formal definition can be seen in the next section, \ref{ALCsemantics}. 
 \section{Selected description logics}
 
 \subsection{$\mathcal{ALC}$}
-In this thesis, we will be using a widely used description logic $\mathcal{ALC}$ and it's extensions.
+In this thesis, we will be using a widely used description logic $\mathcal{ALC}$ and it's extensions. Although
 $\mathcal{ALC}$ stands for ''Attributive concept Language with Complements''. It's one of the less expressive languages, for example, it can't express the concept '' someone who has 2 children ''.
-You can see examples of statements in $\mathcal{ALC}$ in the previous section. 
+You can see examples of TBox (\ref{TBoxEx}) and ABox (\ref{ABoxEx}) statements in $\mathcal{ALC}$ in the previous section, now it is time for formal definitions. 
 \begin{mydef} 
 \label{ALCsyntax}
 \cite{handbook2}
@@ -67,10 +79,9 @@ role names. The set of Concepts is the smallest set such that
 \item $ \top, \bot,$ and every concept name $A \in N_C$ is an Concept,
 \item  If C and D are Concepts and $r \in N_R$, then $C \sqcap D,\\ C \sqcup D , \neg C, \forall r.C,$ and $\exists r.C$ are Concepts.
 \end{enumerate}
+The set of roles is the set of role names $N_R$. (Note: this is not true for some simple extensions of $\ALC$, for example $\ALC _{(\cap)}$ - $\ALC$ with role intersection)  
 \end{mydef}
-$\top$ and $\bot$ are special concepts 'everything' and 'nothing'. Every individual belongs to concept $\top$ and no individuals belong to concept $\bot$.\\
-
-The semantics of $\mathcal{ALC}$ (and of DLs in general) are given in as interpretations. 
+The semantics of $\mathcal{ALC}$ (and of DLs in general) are given as interpretations. 
 \begin{mydef}
 \label{ALCsemantics}
 \cite{handbook2} 
@@ -86,31 +97,28 @@ $(C \sqcap D)^\mathcal{I}$ & $= C^\mathcal{I} \cap D^\mathcal{I}$,\\
  $(\forall r.C)^\mathcal{I}$ & $= \{x \in \Delta ^\mathcal{I} | \forall y \in \Delta ^\mathcal{I},$ if $\langle x, y \rangle \in  r^\mathcal{I},$ then  $y \in C^\mathcal{I}\}$.\\
 \end{tabular}
 \end{mydef}
-You may notice that nothing in the definition of interpretation says that an ontology must be 'true'. An interpretation which can intuitively be called 'true' for an ontology is called a model. We will now formally define it.
-An ontology in description logic is often called 'knowledge base'. It consists of various statements, in $\mathcal{ALC}$ it consists of general concept inclusions (GCI), and assertional axioms. A set of GCIs are usually called a TBox (example \ref{TBox}) and a set of assertional axioms ABox(example \ref{ABox}).
-\begin{mydef}\label{ALCTbox} \cite{handbook2} ($\mathcal{ALC}$ TBox model)\\
-A general concept inclusion (GCI) axiom is of the form $C \sqsubseteq D$, where C, D
-are $\mathcal{ALC}$ Concepts. An interpretation $\mathcal{I}$ is a model
-of a GCI $C \sqsubseteq D$ if $C^\mathcal{I} \subseteq D^\mathcal{I}$.\\ $\mathcal{I}$ is a model of a TBox T if it is a model of every GCI
-in T. \\
+You may notice that an interpretation does not have to comply with any TBox or ABox assertions.  If some assertion A is ''true'' for an interpretation $\mathcal{I}$, we say that $\mathcal{I}$ \textbf{satisfies} A.
+
+\begin{mydef} (satisfiability)
+Given an interpretation $\mathcal{I}$:
+\begin{itemize}
+\item  A GCI $A \sqsubseteq B$ is satisfied by $\mathcal{I}$ iff $A^\mathcal{I} \subset   B^\mathcal{I} $ .
+\item  A concept assertion $a:C$ is satisfied by $\mathcal{I}$ iff $a^\mathcal{I} \in C^\mathcal{I} $ .
+\item A role assertion $a,b:R$ is satisfied by $\mathcal{I}$ iff $ \langle a^mathcal{I} , b^mathcal{I} \rangle \in R^\mathcal{I} $
+\end{itemize}
+An assertion is satisfiable iff an interpretation exists that satisfies it.
 \end{mydef}
-\begin{mydef}\label{ALCAbox} \cite{handbook2} ($\mathcal{ALC}$ ABox model) \\
-An assertional axiom is of the form x : C or (x, y) : r, where C is
-an $\mathcal{ALC}$ Concept, r is a role name, and x and y are individual names.  
-An interpretation $\mathcal{I}$ is a model of an assertional 
-axiom x : C if $x^\mathcal{I} \in C^\mathcal{I}$, and $\mathcal{I}$ is a model of an assertional axiom (x, y) : r if
-($x^\mathcal{I}$,$y^\mathcal{I}) \in r^\mathcal{I}$.\\ $\mathcal{I}$ is a model of an ABox A if it is a model of every assertional axiom in A . \\
+
+\begin{mydef} (model, consistency)
+An interpretation $\mathcal{I}$ is a model of a knowledge base $\K$ if it satisfies every assertion in the TBox and ABox of $\K$.  A knowledge base is consistent if at least one model of it exists.
 \end{mydef}
-\begin{mydef}\label{consistency} \cite{handbook2} (Consistency)\\
-$\mathcal{I}$ is a model of a knowledge base  $\mathcal{K}$=(Tbox $\T$, Abox $\A$) if it's a model of $\mathcal{A}$ and $\mathcal{T}$. \\
-If a model of $\mathcal{K}$ exists, we say that $\mathcal{K}$ is consistent.
-\end{mydef}
+
 
 An ontology can have multiple models, some less intuitive than other.
 
 \begin{myex} (model) \\
 
-\noindent Knowledge base $\mathcal{K} = \{ \mathcal{T} , \mathcal{A} \}$, 
+\noindent Let there be a knowledge base $\mathcal{K} = \{ \mathcal{T} , \mathcal{A} \}$, 
 $ \mathcal{T} $= \{ \\
 \indent $A \sqsubseteq B$ \\
 \indent $A \sqsubseteq	\exists r.C$ \\
@@ -121,13 +129,13 @@ $ \mathcal{A} $ = \{  \\
 \indent c,d : r \\
 \} 
 \\
-One possible model of $\mathcal{K}$, $\mathcal{M}_1$, would be: \{ \\
+One possible model of $\mathcal{K}$ would be $\mathcal{M}_1$ = \{ \\
 \indent $\Delta ^\mathcal{I}$ = \{ $a_x, c_x, d_x$ \} \\
 \indent $a^\mathcal{I} = a_x, c^\mathcal{I} = c_x, d^\mathcal{I} = d_x$\\
 \indent $A^\mathcal{I} = \{a_x\}, B^\mathcal{I} = \{a_x\}, C^\mathcal{I} = \{c_x\}, D^\mathcal{I} = \{d_x\} $\\
 \indent $r^\mathcal{I} = \{ \langle a_x,b_x\rangle , \langle a_x,c_X \rangle, \langle c_x,d_x \rangle \} $ \\
   		\} \\
-But other models also exist, for example $\mathcal{M}_2$ and $\mathcal{M}_3$.
+But other, less intuitive models also exist, for example $\mathcal{M}_2$ and $\mathcal{M}_3$.
 $\mathcal{M}_2$ = \{  \\
 \indent$ \Delta ^\mathcal{I}$ = \{ $a_x, c_x, d_x, c_n$ \} \\ 
 \indent$a^\mathcal{I} $ = $a_x, c^\mathcal{I} = c_x, d^\mathcal{I} = d_x$ \\
@@ -144,44 +152,34 @@ $\mathcal{M}_3$ = \{ \\
 
 \subsection{$\mathcal{SHIQ}$} 
 \label{SHIQ}
-$\mathcal{SHIQ}$ is one of the most expressive description logics.
-\textbf{S} - abbreviation of \textbf{$\mathcal{ALC}$} with transitive roles. \\
-\textbf{H} - Role hierarchy  (role $r_1$ can be subrole of role $r_2$)\\
-\textbf{I} - Inverse properties   (if a,b : r, then b,a : $r^-$) \\
-\textbf{Q} - Quantified cardinality restrictions  (for example $\leq 2  hasChild$)\\
-
-Examples of Concepts in \textbf{$\mathcal{SHIQ}$}:
-\begin{myex} \cite{handbook}
-Examples of Concepts in \textbf{$\mathcal{SHIQ}$}: \\
-$ Human  \sqcap \neg Female \sqcap \exists married.Doctor \\
- \sqcap (\geq 5  hasChild) \sqcap \forall hasChild.Professor $ .
-
-''A man that is married to a doctor and has at least five
-children, all of whom are professors''.
-
-$Human \sqsubseteq \forall hasParent.Human \sqcap (\geq 2 hasParent.\top) \\
- \sqcap (\leq 2 hasParent.\top) 
-\sqcap \forall hasParent^-.Human$
-
-''If someone is a human, all their parents are human. they have exactly two parents, and everything that has them as a parent (i.e. is their child) is a human.''
-
-$hasParent \sqsubseteq hasAnccestor$.
-
-''hasParent is a subrole of hasAncestor (i. e. If A hasparent.B , then A hasAncestor.B).''
+A new description logic can be defined by adding some syntax to an existing description logic, increasing it's expressibility. As such, description logics are usually named as a list of abbreviations (TODO: abbreviations? acronyms? nenapada ma ako preformulovat tuto vetu) of the allowed expressions.\\  
+The language $\mathcal{SHIQ}$ is one of the more expressive description logics. $\mathcal{S}$ is an abbreviation of ''$\mathcal{ALC}$ with transitive roles'' - meaning we can use any syntax from $\ALC$, and also declare a role to be transitive.
+% meaning that for a transitive role R and objects (TODO? tak som ich pomenoval v definicii interpretacie, niesom si isty ci to je spravny nazov) (a,b,c) , if $\langle a,b\rangle \in R^\mathcal{I} $  and $\langle b,c\rangle \in R^\mathcal{I}$ , then $\langle a,c \rangle \in R^\mathcal{I}$. 
+$\mathcal{R}$ stands for ''role hierarchy'', meaning we can define a role to be a subrole of another role. $\mathcal{I}$ stands for ''inverse roles'' (TODO spytat sa: wiki vravi ''inverse properties'', ale mne sa zda ze property je OWL termin a role je DL termin, a teraz vravime o DL a preto vraviet o properties bez definovania by bolo metuce) , meaning for every role R, there is an inverse role $R^-$. Lastly, $\mathcal{Q}$ stand for "qualified cardinality restriction" which allows us to specify the number of objects an object relates to by a role, for example we can say that a painter is someone who has painted at least 10 paintings.
 
 
-Trans(hasAncestor) 
-
-''The role hasAncestor is transitive (i.e. if A hasAncestor.B and B hasAncestor.C then A hasAncestor.C).'' \\
+\begin{myex} 
+Some examples of TBox statements that can be made in $\mathcal{SHIQ}$ but not in $\mathcal{ALC}$:
+\begin{itemize}
+\item  $ Painter \sqsubseteq Human \sqcap \geq 10 hasPainted.Picture $
+\item  $ Painting \sqsubseteq Picture \sqcap \exists hasPainted^-.\top$ \\ 
+''A Painting is a picture that was painted.''
+\item $isParent \sqsubseteq isAncestor$ \\
+Meaning isParent is a subrole of hasAncestor - if someone is a parent of someone, they are also their ancestor.
+\item $ transitive(isAncestor)$ \\
+ The role isAncestor is transitive - if A is an ancestor of B and B is an ancestor of C, then A is an ancestor of C.
+\end{itemize}
+Note that the last 2 examples introduce  statements that are not general concept inclusion to the TBox. For this reason, some authors prefer defining a third part of the knowledge base, RBox, consisting of statements about roles.\\
 \end{myex}
+
 
 The definitions of syntax and semantics of $\mathcal{SHIQ}$ are similar to those of $\mathcal{ALC}$.
 \begin{mydef} 
 \cite{handbook} ($\mathcal{SHIQ}$ concept and role syntax) Let R be a set of role names, which is partitioned into a set $R_+$ of transitive roles and a set $R_p$ of normal roles. 
 The set of all $\mathcal{SHIQ}$ roles is R $\cup \{r^- | r \in R\}$, where $r^-$ is called the inverse of the role r. \\
-Let C be a set of concept names. The set of $\mathcal{SHIQ}$ concepts is the smallest set such that:  
+Let $N_C$ be a set of concept names. The set of $\mathcal{SHIQ}$ concepts is the smallest set such that:  
 \begin{enumerate}
-\item every concept $A \in C$ is a $\mathcal{SHIQ}$ concept.
+\item every concept $A \in N_C$ is a $\mathcal{SHIQ}$ concept.
 \item if A and B are $\mathcal{SHIQ}$ concepts and r is a $\mathcal{SHIQ}$ role, then $A\sqcap B, A\sqcup B,  \neg A, \forall r.A,  and \exists r.A$ are $\mathcal{SHIQ}$ concepts.
 \item if A is a $\mathcal{SHIQ}$ concept and r is a simple $\mathcal{SHIQ}$ role (simple role is neither transitive nor has a transitive subrole), and $n \in \mathbb{N}$, then $(\leq n r.A)$  and 
 $(\geq n r.A)$ are $\mathcal{SHIQ}$ concepts.
@@ -232,7 +230,7 @@ Nominals can be used to express enumerations, for example \cite{primer}: \\
 In $\ALCHO$, the definition of an ABox is the same for $\ALC$ (definition \ref{ALCAbox}) and the definition of a TBox is the same as for $\SHIQ$ (definition \ref{SHIQTBox}.
 \subsection{$\mathcal{SROIQV(D)}$}
 Jazyk koncludu, TODO asi ked bude hotova implementacia.
-\section{tableau algorithm}
+\section{Tableau algorithm}
 
 In our algorithm, we heavily make use of tableau algorithm.
 Tableau algorithm is a method of constructing a model of a knowledge base $\mathcal{K}$ if $\mathcal{K}$ is consistent, and stops if no model of $\mathcal{K}$ exists and thererfore $\K$ is inconsistent. \\ \indent
@@ -271,7 +269,7 @@ Where $C, C_1, C_2$ are concepts, $r$ is role, $\T$ is TBox, and NNF is normal n
 \end{mydef}
 
 Why are we checking whether nodes are blocked? And what are blocked nodes? \\
-If we removed ''x is not blocked'' from all expansion rules, then the algorithm could generate an infinite graph using the $\exists$ rule, for example for 
+If we removed ''x is not blocked'' from all expansion rules, then the algorithm could generate an infinite graph using the $\exists$-rule, for example for 
 $\K =(\T ,\A), \T = \{C \sqsubseteq \exists r.C \}, \A=\{a:C\}$ the algorithm would create a node $a_2$ with $\langle a,a_2 \rangle :r$, then a node $a_3$ with $\langle a_2,a_3\rangle :r$ and so on.
 To guarantee termination, we define node blocking.
 \begin{mydef} \label{ancestor} (ancestor)
@@ -305,7 +303,7 @@ And now we can show the pseudocode of (nondeterministic) tableau algorithm.
 			\While{A tableau expansion rule can be applied on $\CG$}
 				\State Apply a rule on $CG$
 				\If{Clash exists in $\CG$}
-					\State \Return ''$\K$ is inconsistent''  (assuming algorithm undeterministically always picks the 'correct' decision in $\sqcup$ rule if one exists)
+					\State \Return ''$\K$ is inconsistent''  (assuming algorithm undeterministically always picks the 'correct' decision in $\sqcup$-rule if one exists)
 				\EndIf
 			\EndWhile
 			\State \Return ''$\K$ is consistent''
@@ -319,45 +317,42 @@ And now we can show the pseudocode of (nondeterministic) tableau algorithm.
 	
 \end{mydef}
 If the algorithm cannot apply any expansion rules, then $\K$ is consistent and $\CG$ is its model, or a finite part of an infinite model due to blocking. Our abduction algorithm only needs this finite part.\\
- The tableau algorithm has 2 sources of nondeterminism : picking which rule to apply, and how to apply the $\sqcup$ rule. The order of rule applications doesn't matter for the sake of determining consistency, but the application of the $\sqcup$ rule does, as one choice can lead to a clash while the other not. \\ 
+ The tableau algorithm has 2 sources of nondeterminism : picking which rule to apply, and how to apply the $\sqcup$-rule. The order of rule applications doesn't matter for the sake of determining consistency, but the application of the $\sqcup$-rule does, as one choice can lead to a clash while the other not. \\ 
 If a clash happens in a deterministic implementation, we can backtrack to a previous $\sqcup$ decision with an unexplored choice and continue from there. If there are no unexplored $\sqcup$ decisions and we find a clash, $\K$ is inconsistent (no model exists).     
 If there is no decision with an unexplored possibility we can backtrack to, we can declare $\mathcal{K}$ to be inconsistent. 
 I think it would be useful to show an example of tableau completion graph:
 \\
 obrazok odstraneny, nejake problemy s hboxom a nemoznostou lomit riadok.
-%\begin{myex}
-%\begin{align*}
-%  \K &= \left\{
-%      \begin{aligned}
-%       \mathsf{Student} & \sqsubseteq \exists \mathsf{owns}.\mathsf{Textbook} \\       
-% 		\mathsf{Textbook} & \sqsubseteq \mathsf{Book} \\
-%  		\mathsf{tom} & \colon \mathsf{Student}
-%      \end{aligned}
-%    \right\}\\
-%  \end{align*}
-%
-%  \medskip
-%  \begin{center}
-%  \begin{tikzpicture}[-latex ,auto ,node distance =0.5 cm and 0.5 cm,on grid , semithick]
-%	\node[draw,circle,inner sep=2pt,fill] (a) at (0,0) {};
-%	\node (a1) [above left=of a] {$\mathsf{tom}$}; 
-%	\node (a2) [below left=of a] {$\{\mathsf{Student}, \neg \mathsf{Student} \sqcup \exists \mathsf{owns}.\mathsf{Textbook}, 
-%\exists \mathsf{owns}.\mathsf{Textbook}, \neg \mathsf{Textbook} \sqcup Book,\\ \neg \mathsf{Textbook} }\}$}; 
-%	\node[draw,circle,inner sep=2pt,fill] (b) at (6,0) {}; 
-%	\path (a) edge [bend right = -15] node[above =0.15 cm] {$\mathsf{owns}$} (b); 
-%	\node (b1) [above right=of b] {$\mathsf{b_1}$}; 
-%	\node (b2) [below left=of b] {$\{\mathsf{Barbie}, \mathsf{Toy},$}; 
-%	\node (b3) [right=1.6cm of b2] {{$\neg\mathsf{Toy}$}$\}$};
-%	\end{tikzpicture}  
-%  \end{center}
-%In this case, the tableau algorithm stops on a contradiction - mary must own a barbie and no toys, but barbie is a toy, so b1 is supposed to both be a toy and not be a toy. \\
-%Note that this picture shows only partial labels, the full label for mary according to expansion rules could be $\{ \neg Girl \sqcup \exists owns.Barbie, \exists owns.Barbie, \neg Girl \sqcup \forall owns.\neg Toy, \forall owns.\neg Toy, \neg Barbie \sqcup Toy, \neg Barbie \}$
-%\end{myex}
-%
-%
-%
 
-% TODO: priklad s obrazkom, casova zlozitost, rozsirenie tableau pre ostatne spomenute deskripcne logiky.
+\begin{myex}
+\begin{align*}
+ \K &= \left\{
+     \begin{aligned}
+      \mathsf{Student} & \sqsubseteq \exists \mathsf{owns}.\mathsf{Textbook} \\       
+		\mathsf{Textbook} & \sqsubseteq \mathsf{Book} \\
+ 		\mathsf{tom} & \colon \mathsf{Student}
+     \end{aligned}
+   \right\}\\
+ \end{align*}
+
+ \medskip
+ \begin{center}
+ \begin{tikzpicture}[-latex ,auto ,node distance =0.5 cm and 0.5 cm,on grid , semithick, align=left]
+	\node[draw,circle,inner sep=2pt,fill] (a) at (0,0) {};
+	\node (a1) [above left=of a] {$\mathsf{tom}$}; 
+	\node (a2) at (0,-2) {\\$\{\mathsf{Student}$\\$ \neg \mathsf{Student} \sqcup \exists \mathsf{owns}.\mathsf{Textbook}$\\$ \exists \mathsf{owns}.\mathsf{Textbook}$\\$ \neg \mathsf{Textbook} \sqcup \mathsf{Book},$\\ $\neg \mathsf{Textbook} \}$} ; 
+	\node[draw,circle,inner sep=2pt,fill] (b) at (6,0) {}; 
+	\path (a) edge [bend right = -15] node[above =0.15 cm] {$\mathsf{owns}$} (b); 
+	\node (b1) [above right=of b] {$\mathsf{b_1}$}; 
+	\node (b2) at (6,-2) {$\{\mathsf{Textbook}$,\\$ \neg \mathsf{Student}  \sqcup \exists \mathsf{owns}.\mathsf{Textbook} $\\ $\neg \mathsf{Student} $\\ $\neg \mathsf{Textbook} \sqcup \mathsf{Book}$\\$\mathsf{Book}$}; 
+
+	\end{tikzpicture}  
+ \end{center}
+In this case, the tableau algorithm stops without a clash, therefore the knowledge base is consistent.
+\end{myex}
+
+
+%TODO casova zlozitost, rozsirenie tableau pre ostatne spomenute deskripcne logiky.
 %\section{OWL (mozno)}
 %	TODO: definovat SHOIN
 %\section{Použitia  (možno, spomenúť rôzne databázy)}
