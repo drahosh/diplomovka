@@ -188,13 +188,14 @@ $(\geq n r.A)$ are $\mathcal{SHIQ}$ concepts.
 $\SHIQ$ semantics can be described as $\ALC$ semantics with same additions.
 
  \begin{mydef}($\mathcal{SHIQ}$ semantics) \cite{handbook}
-in addition to definition \ref{ALC semantics}, for all  $p \in R$ and $r \in R_+$: \\
+(TODO: prerobit )
+in addition to definition \ref{ALC semantics}, for all  $p \in R$ and $r,r_1,r_2 \in R_+$: \\
 %\begin{itemize} 
  $\langle x,y \rangle \in p^\mathcal{I}$ iff  $\langle y,x \rangle \in (p^- )^\mathcal{I}$. \\
  if $\langle x,y \rangle \in r^\mathcal{I}$ and $ \langle y,z \rangle \in r^\mathcal{I}$ then $\langle x,z \rangle \in r^\mathcal{I}$.\\
  $(\leq n r.C)^\mathcal{I} = \{x \in \Delta ^\mathcal{I} | \# r^\mathcal{I} (x,C) \leq n\}$,\\
 $(\geq n r.C)^\mathcal{I} = \{x \in \Delta ^\mathcal{I} | \# r^\mathcal{I} (x,C) \geq n\}$,\\
-
+$ if r_1 \sqsubseteq r_2$ and $\langle x,,y \rangle \in r_1 $ then $\langle x,,y \rangle \in r_2 $\\
 %\end{itemize}
 where \#M  denotes the cardinality of the set M, and $r^\mathcal{I} (x,C) \mathrel{\mathop:}= \{y | \langle x,y \rangle \in r^\mathcal{I}$ and $y \in C^\mathcal{I}\}$.
 \end{mydef}
@@ -225,8 +226,10 @@ Nominals can be used to express enumerations, for example \cite{primer}: \\
 	Syntax of $\mathcal{ALCHO}$ is the syntax of $\mathcal{ALC}$ (definition \ref{ALCsyntax}), with \{a\} added to the set of concepts C for each individual 'a'.\\
 	Similarly, semantics of $\mathcal{ALCHO}$ are the semantics of $\mathcal{ALC}$ (definition \ref{ALCsemantics}) with the addition of 
      $\{a\}^\mathcal{I}$ = $ \{ a^\mathcal{I} \} $ ,\\ 
-     where 'a' is an individual and $ \mathcal{I}$ is the interpretation. \\
-\end{mydef}
+     where 'a' is an individual and $ \mathcal{I}$ is the interpretation, and  \\
+$ if r_1 \sqsubseteq r_2$ and $\langle x,,y \rangle \in r_1 $ then $\langle x,,y \rangle \in r_2 $ \\
+  where $r_1$,$r_2$ are roles and $x,y$ are objects.  
+\end{mydef} 
 In $\ALCHO$, the definition of an ABox is the same for $\ALC$ (definition \ref{ALCAbox}) and the definition of a TBox is the same as for $\SHIQ$ (definition \ref{SHIQTBox}.
 \subsection{$\mathcal{SROIQV(D)}$}
 Jazyk koncludu, TODO asi ked bude hotova implementacia.
