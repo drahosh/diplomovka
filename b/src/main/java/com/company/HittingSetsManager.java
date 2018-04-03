@@ -106,7 +106,7 @@ public class HittingSetsManager {
 
 
 
-    public static List<Set<OWLAxiom>>  relevancy_test(List<Set<OWLAxiom>> hittingSets, OWLAxiom antiObservation){
+    public  void  relevancy_test( OWLAxiom antiObservation){
         OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
         try {
             OWLOntology ontology = manager.createOntology();
@@ -129,10 +129,10 @@ public class HittingSetsManager {
                 //System.out.print("passed relevancy test: ");
                 //Main.printAxiomSet(hittingSet);
             }
-            return hittingSets;
+            return;
         }catch(Exception e){
             e.printStackTrace();
         }
-        return null;
+        return;
     }
 }

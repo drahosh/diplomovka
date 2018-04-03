@@ -9,6 +9,8 @@ public  class config{
     public static String reasonerType = "Hermit";
     //String reasonerType = "Pellet";
     public static Boolean loopsAllowed = false;
+    public static Boolean multipleObservations = false;
     public static String[] reasonerTypeListArray = {"Hermit","Pellet"};
     public static List<String> reasonerTypeList = Arrays.asList(reasonerTypeListArray);
+    public static boolean metrics = false;
 }

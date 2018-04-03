@@ -1,6 +1,7 @@
 package com.company;
 
 //reasoners
+import com.google.common.base.Stopwatch;
 import org.semanticweb.HermiT.Reasoner;
 import openllet.owlapi.OWL;
 import openllet.owlapi.OpenlletReasoner;
@@ -28,6 +29,11 @@ public class ReasonerAsker {
     OWLDataFactory dfactory;
     OWLAxiom antiObservation;
     OWLAxiom observation;
+
+    Stopwatch consistencyTimer; //time spent by and number of calls
+    int consistencyCalls;    //    to reasoner for consistency
+    Stopwatch  antiModelTimer;//time spent and ammount of calls
+    int antiModelCalls; //of the getAntiModel function (multiple reasoner calls, time not only spent on reasoner)
     //Set<OWLAxiom> alreadyFoundDebug;
     String reasonerType;
     boolean noLoops;
@@ -49,13 +55,19 @@ public class ReasonerAsker {
 
 
         ReasonerAsker(OWLOntology knowledgeBase, OWLOntologyManager manager, OWLAxiom observation, OWLAxiom antiObservation){
-        //Set<OWLAxiom> observations = new HashSet<>();
         this(knowledgeBase,manager);
         this.observation=observation;
         this.antiObservation=antiObservation ;
             this.manager.addAxiom(this.ontology,this.antiObservation);
 
         }
+    public void passMetrics(Stopwatch consistencyTimer, Stopwatch antiModelTimer, int consistencyCalls, int modelCalls){
+            //pass namiesto create kvoli viacerym pozorovaniam
+            this.consistencyTimer=consistencyTimer;
+            this.antiModelTimer=antiModelTimer;
+            this.consistencyCalls=consistencyCalls;
+            this.antiModelCalls=modelCalls;
+    }
 
     public static Set<OWLClassExpression> nodeClassSet2classExpSet(Set<Node<OWLClass>> nodeList){
         Set<OWLClassExpression> toReturn = new HashSet<OWLClassExpression>();
@@ -73,16 +85,25 @@ public class ReasonerAsker {
         return toReturn;
     }
     public boolean getConsistency(Set<OWLAxiom> axioms){
+
         for (OWLAxiom axiom : axioms){
             manager.addAxiom(ontology,axiom);
         }
       //  System.out.println(axioms);
-
+        if(config.metrics){
+            this.consistencyCalls++;
+            this.consistencyTimer.start();
+        }
         reasoner=refresh_Reasoner(reasoner,ontology);
+
         boolean toReturn=reasoner.isConsistent();
+        if(config.metrics){
+            this.consistencyTimer.stop();
+        }
         for (OWLAxiom axiom : axioms){
             ontology.removeAxiom(axiom);
         }
+
         return toReturn;
     }
     public boolean getConsistencyPositiveObservation(Set<OWLAxiom> axioms){
@@ -106,14 +127,9 @@ public class ReasonerAsker {
         }
         this.antiObservation=antiObservation;
         manager.addAxiom(this.ontology,this.antiObservation);
-
-        //chceme pracovat na vysvetleniach zalozenych na vsetkom okrem sucasne testovaneho pozorovania
-        if(this.observation!=null){
-            ontology.addAxiom(this.observation);
-        }
         this.observation=observation;
-        ontology.removeAxiom(observation);
-        ArrayList<OWLNamedIndividual> individualArray = new ArrayList<OWLNamedIndividual>(ontology.getIndividualsInSignature());
+
+        //ArrayList<OWLNamedIndividual> individualArray = new ArrayList<OWLNamedIndividual>(ontology.getIndividualsInSignature());
         /*for (OWLIndividual ind : individualArray){
             System.out.println(ind);
             System.out.println(EntitySearcher.getTypes(ind,ontology).collect(toSet()));
@@ -123,6 +139,10 @@ public class ReasonerAsker {
 
     public Set<OWLAxiom> getAntiModel(Set<OWLAxiom> axioms){
         //hlada nove typy vzniknute po pridani axiom.
+        if(config.metrics){
+            antiModelCalls++;
+            antiModelTimer.start();
+        }
         ontology.addAxioms(axioms);
         reasoner=refresh_Reasoner(reasoner,ontology);
         ArrayList<OWLNamedIndividual> individualArray = new ArrayList<OWLNamedIndividual>(ontology.getIndividualsInSignature());
@@ -213,6 +233,9 @@ public class ReasonerAsker {
                 System.out.println(ax);
             }
         }*/
+        if(config.metrics){
+            antiModelTimer.stop();
+        }
         return toReturn;
     }
     public static OWLReasoner initializeReasoner(OWLOntology ontology){
@@ -223,7 +246,7 @@ public class ReasonerAsker {
             if(reasonerType.equals("Hermit")){
                  return new Reasoner.ReasonerFactory().createReasoner(ontology);
 
-            }
+            } //openllet
             if(reasonerType.equals("Pellet")){
                 return openllet.owlapi.OpenlletReasonerFactory.getInstance().createReasoner(ontology);
 
@@ -238,20 +261,15 @@ public class ReasonerAsker {
             this.reasoner =factory.createReasoner(ontology,reasonerConfiguration);
             */
 
-            //Hermit:
-            //this.reasoner = new Reasoner.ReasonerFactory().createReasoner(ontology);
-
-            //Openllet:
-            //this.reasoner=openllet.owlapi.OpenlletReasonerFactory.getInstance().createReasoner(ontology);
-            //Openllet can be used as OpenlletReasoner extends OWLReasoner (s .getKB().realize())
         }catch (Exception e){
             e.printStackTrace();  //kvoli malformedUrlException
         }
         return null; //error, asi je zle reasonertype
     }
     public static OWLReasoner refresh_Reasoner(OWLReasoner reasoner, OWLOntology ontology){
-        if(config.reasonerType=="Pellet")
-        {reasoner=openllet.owlapi.OpenlletReasonerFactory.getInstance().createReasoner(ontology);}
+        if(config.reasonerType.equals("Pellet"))
+        {
+            reasoner=openllet.owlapi.OpenlletReasonerFactory.getInstance().createReasoner(ontology);}
         else{reasoner.flush();}
         return reasoner;
     }

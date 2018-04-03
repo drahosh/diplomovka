@@ -13,8 +13,26 @@ import static java.util.stream.Collectors.toSet;
 
 public class tests {
     //TODO: automatic testing
+    public static void algorithm_ClassAssertion(String filepath, String indString, String classString, int maxDepth) {
+        try {
+            OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+            final OWLOntology ontology = manager.loadOntologyFromOntologyDocument(new File(filepath));
+            String baseIriString = ontology.getOntologyID().getOntologyIRI().get().toString();
+            OWLDataFactory dfactory = manager.getOWLDataFactory();
+            OWLNamedIndividual observationIndividual = dfactory.getOWLNamedIndividual(IRI.create(baseIriString + "#" + indString));
+            OWLClassExpression observationClassExp = dfactory.getOWLClass(IRI.create(baseIriString + "#" + classString));
+            OWLAxiom observationOne = dfactory.getOWLClassAssertionAxiom(observationClassExp, observationIndividual);
+            OWLAxiom observationOneComplement = dfactory.getOWLClassAssertionAxiom(observationClassExp.getComplementNNF(), observationIndividual);
+            System.out.println(observationOne);
+            System.out.println(observationOneComplement);
+            Main.the_algorithm_simple(ontology, manager, observationOne, observationOneComplement, maxDepth);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+    }
     public static void test1() {
-        Main.algorithm_ClassAssertion("C:/Users/drahos/Downloads/aaa-pellet/pellet2/examples/src/main/resources/data/test-2ind.owl",
+        algorithm_ClassAssertion("C:/Users/drahos/Downloads/aaa-pellet/pellet2/examples/src/main/resources/data/test-2ind.owl",
                 "b",
                 "E",
                 8);
@@ -22,7 +40,7 @@ public class tests {
     }
 
     public static void test1_2() {
-        Main.algorithm_ClassAssertion("C:/Users/drahos/Downloads/aaa-pellet/pellet2/examples/src/main/resources/data/test-2ind.owl.xml",
+        algorithm_ClassAssertion("C:/Users/drahos/Downloads/aaa-pellet/pellet2/examples/src/main/resources/data/test-2ind.owl.xml",
                 "g",
                 "D",
                 4);
@@ -48,21 +66,21 @@ public class tests {
     }
 
     public static void test2() {
-        Main.algorithm_ClassAssertion("C:/Users/drahos/Downloads/aaa-pellet/pellet2/examples/src/main/resources/data/people+pets.owl",
+        algorithm_ClassAssertion("C:/Users/drahos/Downloads/aaa-pellet/pellet2/examples/src/main/resources/data/people+pets.owl",
                 "a",
                 "Pet",
                 1);
     }
 
     public static void test3() {
-        Main.algorithm_ClassAssertion("C:/Users/drahos/Downloads/aaa-pellet/pellet2/examples/src/main/resources/data/family.owl",
+        algorithm_ClassAssertion("C:/Users/drahos/Downloads/aaa-pellet/pellet2/examples/src/main/resources/data/family.owl",
                 "mary",
                 "Mother",
                 5);
     }
 
     public static void test4() {
-        Main.algorithm_ClassAssertion("C:/Users/drahos/Downloads/simpletestFamily.owl",
+        algorithm_ClassAssertion("C:/Users/drahos/Downloads/simpletestFamily.owl",
                 "mary",
                 "Mother",
                 5);
@@ -116,7 +134,7 @@ public class tests {
     }
 
     public static void test7() {
-        Main.algorithm_ClassAssertion("C:/Users/drahos/Downloads/simpletest_vegetarian3.owl",
+        algorithm_ClassAssertion("C:/Users/drahos/Downloads/simpletest_vegetarian3.owl",
                 "gary",
                 "Vegetarian",
                 3);
@@ -167,7 +185,7 @@ public class tests {
     }
 
     public static void test10() {
-        Main.algorithm_ClassAssertion("C:/Users/drahos/Downloads/aaa-pellet/pellet2/examples/src/main/resources/data/ten.owl",
+        algorithm_ClassAssertion("C:/Users/drahos/Downloads/aaa-pellet/pellet2/examples/src/main/resources/data/ten.owl",
                 "a",
                 "D",
                 15);
@@ -207,7 +225,7 @@ public class tests {
         }
     */
     public static void test10_3() {
-        Main.algorithm_ClassAssertion("C:/Users/drahos/Downloads/ten2.owl",
+        algorithm_ClassAssertion("C:/Users/drahos/Downloads/ten2.owl",
                 "a",
                 "D",
                 1);
@@ -281,7 +299,7 @@ public class tests {
         //pellet pre {a:~D, a:C) vrati model v ktorom (a:A)
         //Toto je sposobene, ako ukazuje to ze to funguje ak flushovanie nahradime vytvorenim noveho reasoneru,
         // tym ze openllet spravne neflushuje, ale dajake veci si pameta
-        Main.algorithm_ClassAssertion("C:/Users/drahos/Downloads/aaa-pellet/pellet2/examples/src/main/resources/data/triple.owl",
+        algorithm_ClassAssertion("C:/Users/drahos/Downloads/aaa-pellet/pellet2/examples/src/main/resources/data/triple.owl",
                 "a",
                 "D",
                 3);
@@ -425,7 +443,6 @@ public class tests {
             OWLNamedIndividual b = dfactory.getOWLNamedIndividual(IRI.create(baseIriString + "#" + "b"));
             OWLClassExpression D = dfactory.getOWLClass(IRI.create(baseIriString + "#" + "D"));
             OWLClassExpression C = dfactory.getOWLClass(IRI.create(baseIriString + "#" + "C"));
-            //TODO: testuj preco nie b:F, teda preco b:F je nekonzistentne
             List<OWLAxiom> observations = new ArrayList<>();
             List<OWLAxiom> antiObservations = new ArrayList<>();
             observations.add(dfactory.getOWLClassAssertionAxiom(D,b));
@@ -439,10 +456,91 @@ public class tests {
         }
     }
     public static void test17() {
-        Main.algorithm_ClassAssertion("C:/Users/drahos/Downloads/aaa-pellet/pellet2/examples/src/main/resources/data/test-inf.owl",
+        algorithm_ClassAssertion("C:/Users/drahos/Downloads/aaa-pellet/pellet2/examples/src/main/resources/data/test-inf.owl",
                 "b",
                 "D",
                 5);
+    }
+    public static void test18(){
+
+        try{
+            OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+            final OWLOntology ontology = manager.loadOntologyFromOntologyDocument(new File("C:/Users/drahos/Downloads/aaa-pellet/pellet2/examples/src/main/resources/data/coffee-ontology.owl"));
+            String baseIriString = ontology.getOntologyID().getOntologyIRI().get().toString();
+            OWLDataFactory dfactory = manager.getOWLDataFactory();
+            OWLNamedIndividual a = dfactory.getOWLNamedIndividual(IRI.create(baseIriString + "#" + "a"));
+            OWLNamedIndividual b = dfactory.getOWLNamedIndividual(IRI.create(baseIriString + "#" + "b"));
+            OWLNamedIndividual c = dfactory.getOWLNamedIndividual(IRI.create(baseIriString + "#" + "c"));
+
+            OWLClassExpression Milk = dfactory.getOWLClass(IRI.create(baseIriString + "#" + "Milk"));
+            OWLClassExpression Coffee = dfactory.getOWLClass(IRI.create(baseIriString + "#" + "Coffee"));
+            OWLClassExpression Pure = dfactory.getOWLClass(IRI.create(baseIriString + "#" + "Pure"));
+
+
+            List<OWLAxiom> observations = new ArrayList<>();
+            List<OWLAxiom> antiObservations = new ArrayList<>();
+            observations.add(dfactory.getOWLClassAssertionAxiom(Milk,a));
+            observations.add(dfactory.getOWLClassAssertionAxiom(Coffee,b));
+            observations.add(dfactory.getOWLClassAssertionAxiom(Pure,c));
+            antiObservations.add(dfactory.getOWLClassAssertionAxiom(Milk.getComplementNNF(),a));
+            antiObservations.add(dfactory.getOWLClassAssertionAxiom(Coffee.getComplementNNF(),b));
+            antiObservations.add(dfactory.getOWLClassAssertionAxiom(Pure.getComplementNNF(),c));
+
+            Main.the_algorithm(ontology,manager,observations,antiObservations,3);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    public static void test19(){
+        try{
+            OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+            final OWLOntology ontology = manager.loadOntologyFromOntologyDocument(new File("C:/Users/drahos/Downloads/LUBM.owl"));
+            String baseIriString = ontology.getOntologyID().getOntologyIRI().get().toString();
+            OWLDataFactory dfactory = manager.getOWLDataFactory();
+            OWLNamedIndividual a = dfactory.getOWLNamedIndividual(IRI.create(baseIriString + "#" + "a"));
+            OWLNamedIndividual jack = dfactory.getOWLNamedIndividual(IRI.create(baseIriString + "#" + "jack"));
+
+            OWLClassExpression Person = dfactory.getOWLClass(IRI.create(baseIriString + "#" + "Person"));
+            OWLClassExpression Employee = dfactory.getOWLClass(IRI.create(baseIriString + "#" + "Employee"));
+            OWLClassExpression Publication = dfactory.getOWLClass(IRI.create(baseIriString + "#" + "Publication"));
+
+
+            List<OWLAxiom> observations = new ArrayList<>();
+            List<OWLAxiom> antiObservations = new ArrayList<>();
+            observations.add(dfactory.getOWLClassAssertionAxiom(Publication,a));
+            observations.add(dfactory.getOWLClassAssertionAxiom(Person,jack));
+            observations.add(dfactory.getOWLClassAssertionAxiom(Employee,jack));
+            antiObservations.add(dfactory.getOWLClassAssertionAxiom(Publication.getComplementNNF(),a));
+            antiObservations.add(dfactory.getOWLClassAssertionAxiom(Person.getComplementNNF(),jack));
+            antiObservations.add(dfactory.getOWLClassAssertionAxiom(Employee.getComplementNNF(),jack));
+
+            Main.the_algorithm(ontology,manager,observations,antiObservations,3);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    public static void test20(){
+        //sanity test
+        try {
+            OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+            final OWLOntology ontology = manager.loadOntologyFromOntologyDocument(new File("C:/Users/drahos/Downloads/aaa-pellet/pellet2/examples/src/main/resources/data/family.owl"));
+            String baseIriString = ontology.getOntologyID().getOntologyIRI().get().toString();
+            OWLDataFactory dfactory = manager.getOWLDataFactory();
+            OWLNamedIndividual observationIndividual = dfactory.getOWLNamedIndividual(IRI.create(baseIriString + "#" + "mary"));
+            OWLClassExpression observationClassExp = dfactory.getOWLClass(IRI.create(baseIriString + "#" + "Mother"));
+            OWLClassExpression observationClassExp2 = dfactory.getOWLClass(IRI.create(baseIriString + "#" + "Grandmother"));
+            OWLAxiom observation = dfactory.getOWLClassAssertionAxiom(dfactory.getOWLObjectUnionOf(observationClassExp,observationClassExp2),observationIndividual);
+            ontology.addAxiom(observation);
+            OWLReasoner reasoner = openllet.owlapi.OpenlletReasonerFactory.getInstance().createReasoner(ontology);
+            System.out.println(reasoner.isConsistent());
+        //    manager.addAxiom(ontology, dfactory.getOWLDeclarationAxiom(dfactory.getOWLNamedIndividual(IRI.create("pseudoanonymous1"))));
+          //  Main.the_algorithm_simple(ontology, manager, observationOne, observationOneComplement, 3);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
     }
     //  test1();
     //test1_2();
